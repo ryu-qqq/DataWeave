@@ -1,7 +1,8 @@
 import logging
 from typing import Dict, Any
-
 from injector import singleton, inject
+from http_client import HttpClient
+
 
 @singleton
 class CookieManager:
@@ -10,7 +11,7 @@ class CookieManager:
         self.http_client = http_client
 
     async def get_cookies(self, url: str, headers: Dict[str, str], session=None) -> Dict[str, Any]:
-        response = await self.http_client.get_client_response(url, headers, {})
+        response = await self.http_client.get(url, headers, {})
         if response:
             cookies = {}
             for cookie in response.cookies.values():
