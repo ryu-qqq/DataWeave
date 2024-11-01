@@ -1,6 +1,6 @@
 import aiohttp
 
-from session_manager import SessionManager
+from dataweave.session_manager import SessionManager
 
 
 class AsyncSessionManager(SessionManager):

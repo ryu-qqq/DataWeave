@@ -1,6 +1,6 @@
 import requests
 
-from session_manager import SessionManager
+from dataweave.session_manager import SessionManager
 
 
 class SyncSessionManager(SessionManager):
