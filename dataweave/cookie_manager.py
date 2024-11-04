@@ -1,16 +1,18 @@
 import logging
 from typing import Dict, Any
+
 from injector import singleton, inject
-from http_client import HttpClient
+
+from dataweave.async_http_client import AsyncHttpClient
 
 
 @singleton
 class CookieManager:
     @inject
-    def __init__(self, http_client: HttpClient):
+    def __init__(self, http_client: AsyncHttpClient):
         self.http_client = http_client
 
-    async def get_cookies(self, url: str, headers: Dict[str, str], session=None) -> Dict[str, Any]:
+    async def get_cookies(self, url: str, headers: Dict[str, str]) -> Dict[str, Any]:
         response = await self.http_client.get(url, headers, {})
         if response:
             cookies = {}

@@ -16,8 +16,8 @@ DataWeave는 웹 크롤링을 통해 다양한 데이터 소스를 수집하고 
 ```bash
 git clone https://github.com/ryu-qqq/DataWeave.git
 cd DataWeave
-python3 -m venv dataweave-env
-source dataweave-env/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
 ### 2. 필요한 패키지 설치
@@ -25,15 +25,16 @@ source dataweave-env/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-### 3. Airflow 설정
+### 3. Docker Compose 설정
 
-Airflow 초기화 및 웹서버/스케줄러를 설정합니다. 필요한 경우 .env 파일에서 환경 변수를 설정합니다.
-
+Docker Compose를 사용하여 Airflow, MySQL, Redis 등의 필요한 서비스를 컨테이너로 실행합니다. docker-compose.yml 파일을 실행하여 환경을 설정할 수 있습니다.
 ```bash
-airflow db init
-airflow webserver --port 8080 &
-airflow scheduler &
+docker-compose up -d
 ```
+
+이 명령어를 사용하면 Airflow 웹서버가 8080 포트에서 실행되며, MySQL과 Redis가 백엔드로 설정됩니다. Airflow 웹 UI에 접속하려면 브라우저에서 http://localhost:8080을 입력하세요.
+참고: Docker가 설치되어 있어야 하며, .env.local 파일에서 필요한 환경 변수를 설정해야 합니다.
+
 
 ### 4. 크롤링 모듈 설정
 
@@ -43,27 +44,23 @@ dataweave 폴더에서 크롤링 모듈을 설정하고 데이터 수집 로직�
 
 ```
 DataWeave/
-├── dataweave-env/        # Python 가상환경 폴더
-├── dataweave/            # 크롤링 및 데이터 처리 모듈
-├── dags/                 # Airflow DAG 폴더
-├── requirements.txt      # Python 패키지 목록
-├── README.md             # 프로젝트 설명
-└── .env                  # 환경 변수 설정 파일 (예정)
+├── .venv/                 # Python 가상환경 폴더
+├── dataweave/             # 크롤링 및 데이터 처리 모듈
+├── dags/                  # Airflow DAG 폴더
+├── requirements.txt       # Python 패키지 목록
+├── README.md              # 프로젝트 설명
+├── docker-compose.yml     # Docker Compose 설정 파일
+└── .env.local             # 환경 변수 설정 파일
 ```
 
 
 ### 사용법
-크롤링 작업 실행
-Airflow의 DAG를 통해 주기적으로 크롤링 작업을 실행합니다.
-LLM 통합 (예정)
-추후 통합 예정인 LLM을 통해 데이터 기반의 자연어 응답을 받을 수 있습니다.
-
-
+#### 1. 크롤링 작업 실행: Airflow의 DAG를 통해 주기적으로 크롤링 작업을 실행합니다.
+#### 2. LLM 통합 (예정): 추후 통합 예정인 LLM을 통해 데이터 기반의 자연어 응답을 받을 수 있습니다.
 
 
 ### 기여 방법
 프로젝트에 기여하고 싶으신 분들은 이슈나 PR을 열어 자유롭게 의견을 나누고 새로운 기능을 추가해주시면 감사하겠습니다.
-
 
 ### 노션 링크
 https://www.notion.so/DataWeave-12f72e942a1680f3a2f8d33ee7332eac

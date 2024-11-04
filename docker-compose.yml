@@ -1,0 +1,82 @@
+version: '3'
+x-airflow-common: &airflow-common
+  image: rsw2/set-of-airflow:latest
+  environment:
+    - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=mysql+mysqlconnector://root:12345@mysql:3306/airflow
+    - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+    - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql+mysqlconnector://root:12345@mysql:3306/airflow
+    - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/0
+    - AIRFLOW__CORE__LOAD_EXAMPLES=false
+    - AIRFLOW__CORE__DEFAULT_TIMEZONE=Asia/Seoul
+    - AIRFLOW__CORE__DAGS_FOLDER=/usr/src/app/dags
+    - PYTHONPATH=/usr/src/app:/usr/src/app/dataweave
+    - ENVIRONMENT=local
+    - AIRFLOW__CORE__BASE_LOG_FOLDER=/usr/src/app/logs
+    - AIRFLOW__LOGGING__REMOTE_LOGGING=False
+    - AIRFLOW__LOGGING__BASE_LOG_FOLDER=/usr/src/app/logs
+    - AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER=/usr/src/app/logs
+    - AIRFLOW__WEBSERVER__SECRET_KEY=mysecretkey
+    - SPRING_SERVER_HOST=http://host.docker.internal:8081  # Spring 서버 접근 설정
+
+  volumes:
+    - ./logs:/usr/src/app/logs
+    - ./dags:/usr/src/app/dags
+    - ./dataweave:/usr/src/app/dataweave
+    - ./.env.local:/usr/src/app/.env.local
+
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: airflow
+      MYSQL_USER: airflow
+      MYSQL_PASSWORD: 12345
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  initdb:
+    <<: *airflow-common
+    command: >
+      bash -c "airflow db init && 
+      airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password 12345"
+
+  webserver:
+    <<: *airflow-common
+    restart: always
+    depends_on:
+      - mysql
+      - initdb
+    ports:
+      - "8080:8080"
+    command: airflow webserver
+
+  scheduler:
+    <<: *airflow-common
+    restart: always
+    depends_on:
+      - mysql
+      - initdb
+    command: airflow scheduler
+
+  worker:
+    <<: *airflow-common
+    restart: always
+    depends_on:
+      - mysql
+      - initdb
+    command: airflow celery worker
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+volumes:
+  mysql_data:
+
+networks:
+  default:
+    driver: bridge

@@ -1,0 +1,21 @@
+[2024-11-04T08:28:14.365+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: crawl_site_1.crawl_task_1_step_1 scheduled__2024-11-03T00:50:00+00:00 [queued]>
+[2024-11-04T08:28:14.421+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: crawl_site_1.crawl_task_1_step_1 scheduled__2024-11-03T00:50:00+00:00 [queued]>
+[2024-11-04T08:28:14.424+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 2
+[2024-11-04T08:28:14.727+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): crawl_task_1_step_1> on 2024-11-03 00:50:00+00:00
+[2024-11-04T08:28:14.739+0000] {standard_task_runner.py:57} INFO - Started process 87 to run task
+[2024-11-04T08:28:14.757+0000] {standard_task_runner.py:84} INFO - Running: ['airflow', 'tasks', 'run', 'crawl_site_1', 'crawl_task_1_step_1', 'scheduled__2024-11-03T00:50:00+00:00', '--job-id', '20', '--raw', '--subdir', 'DAGS_FOLDER/dynamic_crawl_dag.py', '--cfg-path', '/tmp/tmpy6hopqsl']
+[2024-11-04T08:28:14.762+0000] {standard_task_runner.py:85} INFO - Job 20: Subtask crawl_task_1_step_1
+[2024-11-04T08:28:15.233+0000] {task_command.py:416} INFO - Running <TaskInstance: crawl_site_1.crawl_task_1_step_1 scheduled__2024-11-03T00:50:00+00:00 [running]> on host 7cdd5d9448a6
+[2024-11-04T08:28:15.896+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='ryuqq' AIRFLOW_CTX_DAG_ID='crawl_site_1' AIRFLOW_CTX_TASK_ID='crawl_task_1_step_1' AIRFLOW_CTX_EXECUTION_DATE='2024-11-03T00:50:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-11-03T00:50:00+00:00'
+[2024-11-04T08:28:15.905+0000] {taskinstance.py:1937} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/airflow/operators/python.py", line 192, in execute
+    return_value = self.execute_callable()
+  File "/usr/local/lib/python3.10/site-packages/airflow/operators/python.py", line 209, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/usr/src/app/dags/dynamic_crawl_dag.py", line 10, in create_crawl_task
+    print(f"Executing task: {task['taskType']} on endpoint ID {task['endpointId']}")
+TypeError: 'CrawlTaskResponse' object is not subscriptable
+[2024-11-04T08:28:16.042+0000] {taskinstance.py:1400} INFO - Marking task as UP_FOR_RETRY. dag_id=crawl_site_1, task_id=crawl_task_1_step_1, execution_date=20241103T005000, start_date=20241104T082814, end_date=20241104T082816
+[2024-11-04T08:28:16.192+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 20 for task crawl_task_1_step_1 ('CrawlTaskResponse' object is not subscriptable; 87)
+[2024-11-04T08:28:16.226+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
