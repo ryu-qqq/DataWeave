@@ -20,6 +20,16 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
+#### 환경 변수 설정
+
+`.env.local.example` 파일을 참고하여 `.env.local` 파일을 생성하고, 필요한 API 키와 IP 주소를 설정하세요.
+
+```bash
+cp .env.local.example .env.local
+# .env.local 파일을 열고 필요한 값을 설정합니다
+```
+
+
 ### 2. 필요한 패키지 설치
 
 ```bash
