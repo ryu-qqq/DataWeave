@@ -34,7 +34,7 @@ def create_site_profile_dag(site_profile):
         )
 
         for endpoint in site_profile.crawl_endpoints:
-            with TaskGroup(group_id=f"endpoint_{site_profile.mapping_id}") as endpoint_group:
+            with TaskGroup(group_id=f"endpoint_{site_profile.mapping_id}_{endpoint.endpoint_id}") as endpoint_group:
                 for task_data in endpoint.crawl_tasks:
                     task = PythonOperator(
                         task_id=f"crawl_task_{task_data.endpoint_id}_step_{task_data.step_order}",
