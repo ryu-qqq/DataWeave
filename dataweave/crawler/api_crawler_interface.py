@@ -5,6 +5,6 @@ from dataweave.crawler.crawler_interface import CrawlerInterface
 
 class ApiCrawlerInterface(CrawlerInterface):
     @abstractmethod
-    async def crawl_api(self, endpoint: str, method: str, params: dict):
+    async def crawl_api(self, *args, **kwargs):
         """Crawls using an API endpoint and optional parameters."""
         pass

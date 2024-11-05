@@ -4,11 +4,11 @@ from typing import Dict, Any
 from string import Template
 from injector import inject, singleton, Injector
 from dataweave.cookie_manager import CookieManager
-from dataweave.crawler.auth.auth_provider import AuthProvider
+from dataweave.crawler.auth.auth_interface import AuthInterface
 
 
 @singleton
-class CookieAuthProvider(AuthProvider):
+class CookieAuthProvider(AuthInterface):
 
     @inject
     def __init__(self, cookie_manager: CookieManager):
@@ -26,16 +26,15 @@ class CookieAuthProvider(AuthProvider):
         headers.update(auth_headers)
         return headers
 
-    def set_dynamic_headers(self, auth_header: str, cookies: Dict[str, Any], payload: str) -> Dict[str, str]:
+    @staticmethod
+    def set_dynamic_headers(auth_header: str, cookies: Dict[str, Any], payload: str) -> Dict[str, str]:
         template = Template(payload)
         required_keys = re.findall(r'\$\{(.*?)\}', payload)
 
-        context = {}
-        for key in required_keys:
-            context[key] = cookies.get(key, {}).get('value', '')
+        context = {key: cookies.get(key, {}).get('value', '') for key in required_keys}
 
         substituted_text = template.safe_substitute(**context).strip()
-        clean_text = ' '.join(substituted_text.split())
+        clean_text = substituted_text.replace('"', '')
 
         return {auth_header: clean_text}
 

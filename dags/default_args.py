@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 def create_default_args(
         owner='ryuqq',
         depends_on_past=False,
-        start_date_offset_minutes=1,
+        start_date=None,
         retries=1,
         email_on_failure=False,
         email_on_retry=False,
@@ -23,7 +23,7 @@ def create_default_args(
     default_args = {
         'owner': owner,
         'depends_on_past': depends_on_past,
-        'start_date': datetime.now() - timedelta(minutes=start_date_offset_minutes),
+        'start_date': start_date or datetime(2024, 11, 5),
         'retries': retries,
         'email_on_failure': email_on_failure,
         'email_on_retry': email_on_retry,
