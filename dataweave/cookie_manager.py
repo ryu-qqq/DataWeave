@@ -4,6 +4,7 @@ from typing import Dict, Any
 from injector import singleton, inject
 
 from dataweave.async_http_client import AsyncHttpClient
+from dataweave.sync_http_client import SyncHttpClient
 
 
 @singleton
@@ -13,7 +14,7 @@ class CookieManager:
         self.http_client = http_client
 
     async def get_cookies(self, url: str, headers: Dict[str, str]) -> Dict[str, Any]:
-        response = await self.http_client.get(url, headers, {})
+        response = await self.http_client.get_response(url, headers, {})
         if response:
             cookies = {}
             for cookie in response.cookies.values():

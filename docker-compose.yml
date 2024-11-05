@@ -1,6 +1,6 @@
 version: '3'
 x-airflow-common: &airflow-common
-  image: rsw2/set-of-airflow:latest
+  build: .  # Dockerfile 위치가 프로젝트 루트인 경우
   environment:
     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=mysql+mysqlconnector://root:12345@mysql:3306/airflow
     - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
@@ -16,7 +16,7 @@ x-airflow-common: &airflow-common
     - AIRFLOW__LOGGING__BASE_LOG_FOLDER=/usr/src/app/logs
     - AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER=/usr/src/app/logs
     - AIRFLOW__WEBSERVER__SECRET_KEY=mysecretkey
-    - SPRING_SERVER_HOST=http://host.docker.internal:8081  # Spring 서버 접근 설정
+    - SPRING_SERVER_HOST=http://host.docker.internal:8081
 
   volumes:
     - ./logs:/usr/src/app/logs
@@ -39,12 +39,16 @@ services:
 
   initdb:
     <<: *airflow-common
+    env_file:
+      - ./.env.local
     command: >
       bash -c "airflow db init && 
       airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password 12345"
 
   webserver:
     <<: *airflow-common
+    env_file:
+      - ./.env.local
     restart: always
     depends_on:
       - mysql
@@ -55,6 +59,8 @@ services:
 
   scheduler:
     <<: *airflow-common
+    env_file:
+      - ./.env.local
     restart: always
     depends_on:
       - mysql
@@ -63,6 +69,8 @@ services:
 
   worker:
     <<: *airflow-common
+    env_file:
+      - ./.env.local
     restart: always
     depends_on:
       - mysql
