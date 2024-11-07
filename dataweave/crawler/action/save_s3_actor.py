@@ -22,7 +22,7 @@ class SaveS3Actor(ActionInterface):
             "data": data
         }
 
-        object_name = self.__generate_object_name(site_name, task.endpoint_id)
+        object_name = self.__generate_object_name(site_name, task.target)
 
         try:
             await self.s3_upload_service.upload_json_data(data_with_metadata, object_name)
@@ -32,8 +32,8 @@ class SaveS3Actor(ActionInterface):
             raise
 
     @staticmethod
-    def __generate_object_name(site_name: str, end_point_url: str) -> str:
-        return f"CRAWLING/{site_name}/{end_point_url}/{datetime.utcnow().strftime('data_%Y-%m-%d_%H-%M-%S.json')}"
+    def __generate_object_name(site_name: str, target: str) -> str:
+        return f"CRAWLING/{site_name}/{target}/{datetime.utcnow().strftime('data_%Y-%m-%d_%H-%M-%S.json')}"
 
 
 injector = Injector()
