@@ -15,7 +15,7 @@ class S3UploadService:
 
     async def upload_json_data(self, data, object_name):
         if isinstance(data, dict):
-            data = json.dumps(data)
+            data = json.dumps(data, ensure_ascii=False)
 
         data_bytes = BytesIO(data.encode('utf-8'))
 

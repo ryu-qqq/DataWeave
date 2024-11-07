@@ -16,7 +16,7 @@ siteProfiles:
       params: '{}'
       responseMapping: '{"items": "$.items[*]"}'
       stepOrder: 1
-      target: ''
+      target: RAW_DATA
       type: CRAWLING
     endPointUrl: /products/search
     endpointId: 84
@@ -26,14 +26,13 @@ siteProfiles:
     crawlType: API
   headers:
     Accept: '*/*'
-    Accept-Encoding: gzip, deflate, br
-    Sec-Ch-Ua-Mobile: ?0
-    Sec-Fetch-Dest: document
-    Sec-Fetch-Mode: navigate
-    Sec-Fetch-Site: same-origin
+    Accept-Encoding: gzip, deflate
+    Accept-Language: en-US,en;q=0.9
+    Sec-Ch-Ua-Platform: '"macOS"'
+    Sec-Fetch-Site: none
     Sec-Fetch-User: ?1
     Upgrade-Insecure-Requests: '1'
-    User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
-      (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36
+    User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15
+      (KHTML, like Gecko) Version/14.0 Safari/605.1.15
   mappingId: 3
 siteType: CRAWL
