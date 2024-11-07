@@ -55,10 +55,8 @@ AWS S3 설정
 
 AWS 커넥션 정보를 Airflow UI에서 설정합니다. AWS에 대한 **접근 키(Access Key)**와 **비밀 키(Secret Key)**를 설정하고, 연결 이름을 aws_default로 지정합니다.
 Airflow UI의 변수(Variables) 메뉴에서 bucket_name이라는 변수 이름으로 S3 버킷 이름을 지정해야 합니다.
+또한 DAG 실패시 알람을 받기 위해선 Variables 또는 env파일에 slack_webhook_url을 추가해야합니다.
 
-#### 사용법
-Airflow의 dynamic_crawl_dag.py를 통해 주기적으로 크롤링 작업을 실행합니다. 
-이 파일은 ProductHub로부터 크롤링할 대상에 대한 정보를 받아 DAG와 태스크를 동적으로 생성합니다.
 
 ### 프로젝트 구조
 
@@ -75,9 +73,16 @@ DataWeave/
 
 
 ### 사용법
-#### 1. 크롤링 작업 실행: Airflow의 DAG를 통해 주기적으로 크롤링 작업을 실행합니다.
-#### 2. Airflow의 dags패키지 안에 리드미를 참고해 주세요.
-#### 3. LLM 통합 (예정): 추후 통합 예정인 LLM을 통해 데이터 기반의 자연어 응답을 받을 수 있습니다.
+#### 1. sync_crawl_config DAG로 설정 파일 동기화
+sync_crawl_config DAG를 통해 ProductHub 서버로부터 크롤링 대상과 설정 정보를 수신하여 /usr/src/app/dags/config 디렉토리에 YAML 형식의 설정 파일로 저장합니다. 설정 파일은 각 사이트에 대한 크롤링 정보를 담고 있습니다.
+
+#### 2. dynamic_crawl_dag.py를 통한 DAG 및 태스크 생성
+dynamic_crawl_dag.py는 위의 config 파일들을 기반으로 각 사이트의 크롤링을 수행할 DAG를 동적으로 생성합니다.
+설정된 AWS 커넥션과 S3 버킷 정보에 따라 크롤링한 데이터를 저장하거나, 필요한 데이터 가공 작업을 수행합니다.
+
+#### 3. 크롤링 작업 관리
+Airflow의 UI에서 생성된 DAG를 확인하고, DAG가 정의한 스케줄에 따라 크롤링 작업이 실행됩니다.
+
 
 
 ### 기여 방법
