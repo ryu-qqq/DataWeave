@@ -31,7 +31,7 @@ class AsyncHttpClient(HttpClient):
 
     async def _handle_response_errors(self, response, url: str, attempt: int) -> Optional[str]:
         text = await response.text()
-        status = response.status
+        status = await response.status
 
         if status == 401:
             logging.error(f"Unauthorized (401) error for {url}. Check your credentials.")
