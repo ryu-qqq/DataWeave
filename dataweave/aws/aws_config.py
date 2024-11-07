@@ -1,20 +1,23 @@
 import os
-from dotenv import load_dotenv
+
+from airflow.models import Variable
+from airflow.providers.amazon.aws.hooks.base_aws import AwsBaseHook
 from injector import singleton
 
 
 @singleton
 class AwsConfig:
     def __init__(self):
-        ENV = os.getenv("ENVIRONMENT", "local")
-        if ENV == "dev":
-            load_dotenv(".env.dev")
-        elif ENV == "prod":
-            load_dotenv(".env.prod")
-        else:
-            load_dotenv(".env.local")
+        aws_hook = AwsBaseHook(aws_conn_id="aws_default", client_type="s3")
+        self.credentials = aws_hook.get_credentials()
+        self.region_name = aws_hook.region_name
+        self.bucket_name = Variable.get("bucket_name")
 
-        self.AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
-        self.AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-        self.REGION_NAME = os.getenv("REGION_NAME")
-        self.BUCKET_NAME = os.getenv("BUCKET_NAME")
+    @property
+    def aws_access_key(self):
+        return self.credentials.access_key
+
+    @property
+    def aws_secret_access_key(self):
+        return self.credentials.secret_key
+

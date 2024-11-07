@@ -6,6 +6,10 @@ class CrawlAuthSettingResponse:
         self.auth_headers = auth_headers
         self.auth_payload = auth_payload
 
+    def __repr__(self):
+        return (f"CrawlAuthSettingResponse(auth_type='{self.auth_type}', auth_endpoint='{self.auth_endpoint}', "
+                f"auth_headers='{self.auth_headers}', auth_payload='{self.auth_payload}')")
+
     @staticmethod
     def from_dict(data: dict) -> 'CrawlAuthSettingResponse':
         return CrawlAuthSettingResponse(

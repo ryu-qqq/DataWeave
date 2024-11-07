@@ -3,6 +3,9 @@ class CrawlSettingResponse:
         self.crawl_frequency = crawl_frequency
         self.crawl_type = crawl_type
 
+    def __repr__(self):
+        return f"CrawlSettingResponse(crawl_frequency={self.crawl_frequency}, crawl_type='{self.crawl_type}')"
+
     @staticmethod
     def from_dict(data: dict) -> 'CrawlSettingResponse':
         return CrawlSettingResponse(

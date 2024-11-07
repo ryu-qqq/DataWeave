@@ -1,34 +1,28 @@
-import json
-from typing import Dict
-from injector import singleton, inject
-
-from dataweave.cache.redis_client import RedisClient
+from abc import ABC, abstractmethod
+from typing import Optional, Any
 
 
-@singleton
-class CacheManager:
-    @inject
-    def __init__(self, redis_client: RedisClient):
-        self.redis_client = redis_client
+class CacheManager(ABC):
+    @abstractmethod
+    async def get(self, key: str) -> Optional[str]:
+        pass
 
-    async def get_params(self, site_name: str, endpoint: str, page_key: str = "pageNo", size_key: str = "pageSize") -> \
-    Dict[str, int]:
-        redis = await self.redis_client.get_redis()
-        key = f"{site_name}:{endpoint}"
-        cached_data = await redis.get(key)
+    @abstractmethod
+    async def set(self, key: str, value: Any, expire: Optional[int] = None) -> None:
+        pass
 
-        if cached_data:
-            cached_data = json.loads(cached_data)
-            return {
-                page_key: cached_data.get(page_key, 0),
-                size_key: cached_data.get(size_key, 20)
-            }
+    @abstractmethod
+    async def exists(self, key: str) -> bool:
+        pass
 
-        return {page_key: 0, size_key: 20}
+    @abstractmethod
+    async def delete(self, key: str) -> None:
+        pass
 
-    async def update_params(self, site_name: str, endpoint: str, page_no: int, page_size: int,
-                            dynamic_keys: Dict[str, str]):
-        redis = await self.redis_client.get_redis()
-        key = f"{site_name}:{endpoint}"
-        new_data = {dynamic_keys["page_key"]: page_no, dynamic_keys["size_key"]: page_size}
-        await redis.set(key, json.dumps(new_data))
+    @abstractmethod
+    async def increment(self, key: str, amount: int = 1) -> int:
+        pass
+
+    @abstractmethod
+    async def set_expire(self, key: str, time: int) -> bool:
+        pass

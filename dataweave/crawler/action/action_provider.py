@@ -1,13 +1,17 @@
+from dataweave.cache.redis_cache_manager import redis_cache_manager
 from dataweave.crawler.action.action_interface import ActionInterface
-from dataweave.crawler.action.save_s3_action_provider import save_s3_action_provider
-from dataweave.enums.action_type import ActionType
+from dataweave.crawler.action.save_cache_actor import SaveCacheActor
+from dataweave.crawler.action.save_s3_actor import save_s3_actor
+from dataweave.enums.action_type import Action
 
 
 class ActionProvider:
 
     @staticmethod
     def get_action_provider(action_type: str) -> ActionInterface:
-        if action_type == ActionType.SAVE_S3.name:
-            return save_s3_action_provider
+        if action_type == Action.SAVE_S3.name:
+            return save_s3_actor
+        elif action_type == Action.SAVE_CACHE.name:
+            return SaveCacheActor(redis_cache_manager)
 
         raise ValueError(f"Unsupported action type: {action_type}")

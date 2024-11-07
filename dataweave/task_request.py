@@ -4,7 +4,7 @@ from dataweave.api_client.models.crawl_auth_setting_response import CrawlAuthSet
 from dataweave.api_client.models.crawl_task_reponse import CrawlTaskResponse
 
 
-class CrawlTaskRequest:
+class TaskRequest:
     def __init__(self, site_name: str, crawl_type: str, base_url:str, end_point_url: str,
                  parameters: str, task: CrawlTaskResponse, headers: dict, auth_settings: CrawlAuthSettingResponse,
                  previous_result: Optional[Any] = None):

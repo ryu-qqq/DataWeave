@@ -25,7 +25,7 @@ class ProductHubApiClient:
         params = {"siteType": site_type, "cursorId": cursor_id, "pageSize": page_size}
 
         response = self.__http_client.request("GET", url, headers=headers, params=params)
-        response_data = json.loads(response.text)
+        response_data = json.loads(response)
 
         if "data" in response_data:
             from_dict = Slice.from_dict(response_data["data"], SiteResponse)
@@ -39,7 +39,7 @@ class ProductHubApiClient:
         headers = {"Content-Type": "application/json"}
 
         response = self.__http_client.request("GET", url, headers=headers)
-        response_data = json.loads(response.text)
+        response_data = json.loads(response)
         api_response = ApiResponse.from_dict(response_data, data_class=SiteContextResponse)
         return api_response.data
 

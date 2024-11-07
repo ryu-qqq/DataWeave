@@ -19,13 +19,13 @@ class S3UploadService:
 
         data_bytes = BytesIO(data.encode('utf-8'))
 
-        s3_client = await self.aws_client.create_s3_client()
-        try:
-            await s3_client.put_object(Bucket=self.aws_client.bucket_name, Key=object_name, Body=data_bytes)
-            logging.info(f"JSON data uploaded to {self.aws_client.bucket_name}/{object_name}")
-        except Exception as e:
-            logging.error(f"Failed to upload JSON data to {self.aws_client.bucket_name}/{object_name}: {e}")
-            raise
+        async with await self.aws_client.create_s3_client() as s3_client:
+            try:
+                await s3_client.put_object(Bucket=self.aws_client.bucket_name, Key=object_name, Body=data_bytes)
+                logging.info(f"JSON data uploaded to {self.aws_client.bucket_name}/{object_name}")
+            except Exception as e:
+                logging.error(f"Failed to upload JSON data to {self.aws_client.bucket_name}/{object_name}: {e}")
+                raise
 
 
 injector = Injector()

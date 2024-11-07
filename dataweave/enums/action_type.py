@@ -1,9 +1,13 @@
 from enum import Enum
 
 
-class ActionType(Enum):
-    SAVE_CACHE = "SAVE_CACHE"
+class Action(Enum):
     SAVE_S3 = "SAVE_S3"
-    CALL_SERVER = "CALL_SERVER"
-    EXTRACT = "EXTRACT"
-    NONE = "NONE"
+    SAVE_CACHE = "SAVE_CACHE"
+    API_CALL = "API_CALL"
+
+
+class Target(Enum):
+    RAW_DATA = "RAW_DATA"
+    CACHE = "CACHE"
+    PRODUCT = "PRODUCT"

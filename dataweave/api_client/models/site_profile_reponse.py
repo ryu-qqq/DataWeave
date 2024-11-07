@@ -13,7 +13,12 @@ class SiteProfileResponse:
         self.crawl_setting = crawl_setting
         self.crawl_auth_setting = crawl_auth_setting
         self.crawl_endpoints = crawl_endpoints
-        self.headers = headers  # headers 필드 추가
+        self.headers = headers
+
+    def __repr__(self):
+        return (f"SiteProfileResponse(mapping_id={self.mapping_id}, crawl_setting={self.crawl_setting}, "
+                f"crawl_auth_setting={self.crawl_auth_setting}, crawl_endpoints={self.crawl_endpoints}, "
+                f"headers={self.headers})")
 
     @staticmethod
     def from_dict(data: dict) -> 'SiteProfileResponse':

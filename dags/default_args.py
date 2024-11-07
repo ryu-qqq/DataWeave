@@ -1,4 +1,12 @@
-from datetime import datetime, timedelta
+from datetime import datetime
+from airflow.settings import tz
+
+from dags.slack_notify import slack_failed_task_alert
+
+
+def default_args():
+    return create_default_args()
+
 
 def create_default_args(
         owner='ryuqq',
@@ -7,13 +15,14 @@ def create_default_args(
         retries=1,
         email_on_failure=False,
         email_on_retry=False,
-        retry_delay=None
+        retry_delay=None,
+        on_failure_callback=slack_failed_task_alert
 ):
     """
     default_args를 동적으로 생성하는 함수
+    :param on_failure_callback: slack notification callback
     :param owner: DAG의 소유자 (기본값: 'airflow')
     :param depends_on_past: 이전 실행에 의존 여부 (기본값: False)
-    :param start_date_offset_minutes: 시작 날짜의 오프셋 (현재 시간 기준, 기본값: 1분 전)
     :param retries: 재시도 횟수 (기본값: 1)
     :param email_on_failure: 실패 시 이메일 알림 (기본값: False)
     :param email_on_retry: 재시도 시 이메일 알림 (기본값: False)
@@ -27,6 +36,7 @@ def create_default_args(
         'retries': retries,
         'email_on_failure': email_on_failure,
         'email_on_retry': email_on_retry,
+        'on_failure_callback': on_failure_callback,
     }
 
     if retry_delay:

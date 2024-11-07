@@ -1,15 +1,15 @@
 from injector import Injector, singleton
 
-from dataweave.crawler.api_crawler_interface import ApiCrawlerInterface
+from dataweave.crawler.dynamic_page_crawler_interface import DynamicPageCrawlerInterface
 
 
 @singleton
-class SeleniumCrawler(ApiCrawlerInterface):
-    async def crawl_api(self, endpoint: str, method: str, params: dict):
+class SeleniumCrawler(DynamicPageCrawlerInterface):
+    async def crawl_dynamic_page(self, url: str, actions: list):
         pass
 
     async def crawl(self, *args, **kwargs):
-        pass
+        return self.crawl_dynamic_page(*args, **kwargs)
 
 
 injector = Injector()

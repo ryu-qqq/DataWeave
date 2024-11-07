@@ -13,18 +13,17 @@ class AWSClient:
     @inject
     def __init__(self, aws_config: AwsConfig):
         self.aws_config = aws_config
-        self.bucket_name = aws_config.BUCKET_NAME
+        self.bucket_name = aws_config.bucket_name
 
     async def create_s3_client(self):
         try:
             session = aioboto3.Session()
-            async with session.client(
+            return session.client(
                 's3',
-                aws_access_key_id=self.aws_config.AWS_ACCESS_KEY,
-                aws_secret_access_key=self.aws_config.AWS_SECRET_ACCESS_KEY,
-                region_name=self.aws_config.REGION_NAME
-            ) as client:
-                return client  # 클라이언트를 반환
+                aws_access_key_id=self.aws_config.aws_access_key,
+                aws_secret_access_key=self.aws_config.aws_secret_access_key,
+                region_name=self.aws_config.region_name
+            )
         except (NoCredentialsError, PartialCredentialsError) as e:
             logging.error(f"Error creating S3 client: {e}")
             raise

@@ -1,4 +1,7 @@
+import logging
 from typing import List
+
+import yaml
 
 from dataweave.api_client.models.site_profile_reponse import SiteProfileResponse
 
@@ -13,6 +16,11 @@ class SiteContextResponse:
         self.site_type = site_type
         self.site_profiles = site_profiles
 
+    def __repr__(self):
+        return (f"SiteContextResponse(site_id={self.site_id}, site_name='{self.site_name}', "
+                f"base_url='{self.base_url}', country_code='{self.country_code}', site_type='{self.site_type}', "
+                f"site_profiles={self.site_profiles})")
+
     @staticmethod
     def from_dict(data: dict) -> 'SiteContextResponse':
         site_profiles_data = data.get("siteProfiles", [])
@@ -26,3 +34,10 @@ class SiteContextResponse:
             site_type=data.get("siteType"),
             site_profiles=site_profiles
         )
+
+    @staticmethod
+    def load_site_config(file_path):
+        with open(file_path, 'r') as f:
+            config = yaml.safe_load(f)
+        site_context = SiteContextResponse.from_dict(config)
+        return site_context

@@ -20,7 +20,7 @@ class AsyncHttpClient(HttpClient):
             await self.initialize_session()
         proxies = {"http": self.proxy_manager.get_proxy()} if self.proxy_manager else None
         async with self.session.request(method, url, headers=headers, proxy=proxies, **kwargs) as response:
-            return await response.text() if response.status == 200 else self._handle_response_errors(response, url, 0)
+            return await response.text() if response.status == 200 else await self._handle_response_errors(response, url, 0)
 
     async def request_response(self, method: str, url: str, headers: Dict[str, str], **kwargs) -> Optional[Any]:
         if not self.session:
