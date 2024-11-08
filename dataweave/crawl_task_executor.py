@@ -43,7 +43,7 @@ class CrawlTaskExecutor:
 
             action_type = task_info.action
             action_provider = ActionProvider.get_action_provider(action_type)
-            result = await action_provider.action(site_name=site_context.site_name, data=crawl_data, task=task_info)
+            result = await action_provider.action(site_id=site_context.site_id, site_name=site_context.site_name, data=crawl_data, task=task_info)
             return result
 
         except Exception as e:

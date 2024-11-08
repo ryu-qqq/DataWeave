@@ -16,7 +16,7 @@ class SaveCacheActor(ActionInterface):
     def __init__(self, cache_manager: CacheManager):
         self.__cache_manager = cache_manager
 
-    async def action(self, site_name: str, data: Any, task: CrawlTaskResponse):
+    async def action(self, site_id: int, site_name: str, data: Any, task: CrawlTaskResponse):
         params = json.loads(task.params)
         key_field = params.get("key")
         value_field = params.get("value")
