@@ -43,12 +43,12 @@ class ProductHubApiClient:
         api_response = ApiResponse.from_dict(response_data, data_class=SiteContextResponse)
         return api_response.data
 
-    def fetch_crawl_products_context(self, site_name: str, page_size: int,
+    def fetch_crawl_products_context(self, site_name: str, page_size: int, is_product_group_id_null: bool,
                                      cursor_id: Optional[int]) -> Slice:
         url = f"{self.__base_url}/api/v1/site/crawl/product"
         headers = {"Content-Type": "application/json"}
 
-        params = {"siteName": site_name, "cursorId": cursor_id, "pageSize": page_size}
+        params = {"siteName": site_name, "isProductGroupIdNull": is_product_group_id_null,"cursorId": cursor_id, "pageSize": page_size}
         response = self.__http_client.request("GET", url, headers=headers, params=params)
 
         response_data = json.loads(response)

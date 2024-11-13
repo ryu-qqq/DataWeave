@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from pathlib import Path
 
@@ -8,7 +9,6 @@ from dags.default_args import default_args
 from dataweave.api_client.models.crawl_task_reponse import CrawlTaskResponse
 from dataweave.api_client.models.site_context_response import SiteContextResponse
 from dataweave.api_client.models.site_profile_reponse import SiteProfileResponse
-from dataweave.coroutine_utils import CoroutineUtils
 from dataweave.task_executor import TaskExecutor
 
 
@@ -16,9 +16,14 @@ def fetch_previous_result(task_instance, task_id: str):
     return task_instance.xcom_pull(task_ids=task_id)
 
 
-def perform_crawl_task(site_profile: SiteProfileResponse, site_context: SiteContextResponse, task_info: CrawlTaskResponse, **context):
+def perform_crawl_task(
+        site_profile: SiteProfileResponse,
+        site_context: SiteContextResponse,
+        task_info: CrawlTaskResponse,
+        **context):
     task_instance = context['ti']
-    previous_result = fetch_previous_result(task_instance, task_instance.task_id)
+
+    previous_result = task_instance.xcom_pull(key="processing_result", task_ids=f"{task_instance.task_id}")
 
     executor = TaskExecutor(
         site_profile=site_profile,
@@ -27,10 +32,11 @@ def perform_crawl_task(site_profile: SiteProfileResponse, site_context: SiteCont
         previous_result=previous_result
     )
 
-    result = CoroutineUtils.run_async(executor.execute())
+    result = asyncio.run(executor.execute())
 
     if task_info.type == "PROCESSING":
         task_instance.xcom_push(key="processing_result", value=result)
+
     return result
 
 

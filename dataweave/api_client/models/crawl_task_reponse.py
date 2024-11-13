@@ -16,9 +16,10 @@ class CrawlTaskResponse:
             f"target='{self.target}', action='{self.action}', params='{self.params}', endpointUrl='{self.end_point_url}', "
             f"response_mapping='{self.response_mapping}')")
 
-
     @staticmethod
-    def from_dict(data: dict) -> 'CrawlTaskResponse':
+    def from_dict(data: dict, end_point_url: str = "") -> 'CrawlTaskResponse':
+        final_end_point_url = end_point_url + data.get("endPointUrl") if end_point_url else data.get("endPointUrl")
+
         return CrawlTaskResponse(
             endpoint_id=data.get("endpointId"),
             step_order=data.get("stepOrder"),
@@ -26,6 +27,6 @@ class CrawlTaskResponse:
             target=data.get("target"),
             action=data.get("action"),
             params=data.get("params"),
-            end_point_url=data.get("endPointUrl"),
+            end_point_url=final_end_point_url,
             response_mapping=data.get("responseMapping")
         )

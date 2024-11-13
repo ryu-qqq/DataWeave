@@ -1,5 +1,3 @@
-import os
-
 from airflow.models import Variable
 from airflow.providers.amazon.aws.hooks.base_aws import AwsBaseHook
 from injector import singleton
@@ -12,6 +10,10 @@ class AwsConfig:
         self.credentials = aws_hook.get_credentials()
         self.region_name = aws_hook.region_name
         self.bucket_name = Variable.get("bucket_name")
+
+        # self.credentials = "TEEST"
+        # self.region_name = "TEEST"
+        # self.bucket_name = "TEEST"
 
     @property
     def aws_access_key(self):

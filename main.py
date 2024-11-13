@@ -1,44 +1,74 @@
 import asyncio
+import json
 
 from dataweave.api_client.models.crawl_auth_setting_response import CrawlAuthSettingResponse
 from dataweave.api_client.models.crawl_endpoint_response import CrawlEndpointResponse
 from dataweave.api_client.models.crawl_task_reponse import CrawlTaskResponse
 from dataweave.api_client.models.site_context_response import SiteContextResponse
-from dataweave.crawler.task.crawl_task_executor import CrawlTaskExecutor
+from dataweave.api_client.models.site_profile_reponse import SiteProfileResponse
+from dataweave.crawler.task.crawl_task_executor import CrawlTaskExecutor, crawl_task_executor
 
 if __name__ == "__main__":
+    json_data = """
+       {
+           "mappingId": 15,
+           "crawlSetting": {
+               "crawlFrequency": 10,
+               "crawlType": "API"
+           },
+           "crawlAuthSetting": {
+               "authType": "COOKIE",
+               "authEndpoint": "https://m.web.mustit.co.kr",
+               "authHeaders": "Authorization",
+               "authPayload": "${token_type} ${token}"
+           },
+           "crawlEndpoints": [
+               {
+                   "endpointId": 21,
+                   "endPointUrl": "/mustit-api",
+                   "parameters": "",
+                   "crawlTasks": [
+                       {
+                                "endpointId": 21,
+                                "stepOrder": 2,
+                                "type": "CRAWLING",
+                                "target": "PRODUCT",
+                                "action": "SAVE_S3",
+                                "params": {"siteProductId": "${crawl_product_sku}"},
+                                "endPointUrl": "/facade-api/v1/item/{crawl_product_sku}/detail/top?isApp=false",
+                                "responseMapping": "{}"
+                            },
+                       {
+                                "endpointId": 21,
+                                "stepOrder": 3,
+                                "type": "CRAWLING",
+                                "target": "PRODUCT",
+                                "action": "SAVE_S3",
+                                "params": {"siteProductId": "${crawl_product_sku}"},
+                                "endPointUrl": "/legacy-api/v1/auction_products/{crawl_product_sku}/options",
+                                "responseMapping": "{}"
+                            }
+                   ]
+               }
+           ],
+           "headers": {
+               "Accept": "*/*",
+               "Connection": "close",
+               "User-Agent": "Mozilla/5.0",
+               "Accept-Encoding": "gzip, deflate",
+               "Accept-Language": "ko-KR,ko;q=0.9"
+           }
+       }
+       """
 
+    data = json.loads(json_data)
+    site_profile_response = SiteProfileResponse.from_dict(data)
+    site_context = SiteContextResponse(site_id=1, site_name="MUSTIT", base_url="https://m.web.mustit.co.kr",
+                                       country_code="KR", site_type="CRAWL", site_profiles=[site_profile_response])
 
-
-    end_point = CrawlEndpointResponse(endpoint_id=1, end_point_url="/products/search", parameters="categoryNos=791683&order.direction=DESC&pageNumber={}&pageSize={}", crawl_tasks=[])
-
-    headers = {
-                    "Sec-Ch-Ua": "\"Chromium\";v=\"124\", \"Google Chrome\";v=\"124\", \"Not-A.Brand\";v=\"99\"",
-                    "Accept": "*/*",
-                    "Sec-Ch-Ua-Platform": "\"macOS\"",
-                    "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15",
-                    "Accept-Encoding": "gzip, deflate",
-                    "Accept-Language": "en-US,en;q=0.9"
-                }
-
-    auth_settings = CrawlAuthSettingResponse(
-        auth_type="NONE",
-        auth_endpoint="",
-        auth_headers="",
-        auth_payload="{\"version\": \"1.0\", \"clientid\": \"183SVEgDg5nHbILW//3jvg==\", \"platform\": \"PC\"}"
-    )
-
-    site_context = SiteContextResponse(site_id=2, site_name="KASINA", base_url="https://shop-api.e-ncp.com",
-                                   country_code="KR", site_type="CRAWL", site_profiles= [])
-
-    task = CrawlTaskResponse(endpoint_id="1", step_order=1, type="CRAWLING", target="RAW_DATA", action="SAVE_S3",
-                                 params="{}", response_mapping="{\"items\": \"$.items[*]\"}")
-
-    asyncio.run(CrawlTaskExecutor.perform_crawling(
-        crawl_type="API",
-        headers=headers,
-        site_context= site_context,
-        auth_settings=auth_settings,
-        crawl_end_point=end_point,
-        task_info=task
-        ))
+    asyncio.run(crawl_task_executor.perform_crawling(
+        site_profile=site_profile_response,
+        site_context=site_context,
+        task_info=site_profile_response.crawl_endpoints[0].crawl_tasks[0],
+        previous_result={'content': [{'crawlProductId': 1, 'siteId': 1, 'siteName': 'MUSTIT', 'siteProductId': '95713119', 'productName': None, 'productGroupId': None}, {'crawlProductId': 2, 'siteId': 1, 'siteName': 'MUSTIT', 'siteProductId': '95713115', 'productName': None, 'productGroupId': None}, {'crawlProductId': 3, 'siteId': 1, 'siteName': 'MUSTIT', 'siteProductId': '95711728', 'productName': None, 'productGroupId': None}, {'crawlProductId': 4, 'siteId': 1, 'siteName': 'MUSTIT', 'siteProductId': '95711723', 'productName': None, 'productGroupId': None}, {'crawlProductId': 5, 'siteId': 1, 'siteName': 'MUSTIT', 'siteProductId': '95711719', 'productName': None, 'productGroupId': None}, {'crawlProductId': 6, 'siteId': 1, 'siteName': 'MUSTIT', 'siteProductId': '95711712', 'productName': None, 'productGroupId': None}, {'crawlProductId': 7, 'siteId': 1, 'siteName': 'MUSTIT', 'siteProductId': '95711709', 'productName': None, 'productGroupId': None}, {'crawlProductId': 8, 'siteId': 1, 'siteName': 'MUSTIT', 'siteProductId': '95711706', 'productName': None, 'productGroupId': None}, {'crawlProductId': 9, 'siteId': 1, 'siteName': 'MUSTIT', 'siteProductId': '95711701', 'productName': None, 'productGroupId': None}, {'crawlProductId': 10, 'siteId': 1, 'siteName': 'MUSTIT', 'siteProductId': '95711699', 'productName': None, 'productGroupId': None}], 'last': True, 'first': False, 'sort': 'DESC', 'size': 10, 'numberOfElements': 10, 'empty': False, 'cursor': 10, 'totalElements': 180}
+    ))

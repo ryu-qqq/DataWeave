@@ -2,9 +2,9 @@ import json
 
 from injector import singleton, inject
 
-from dataweave.cache.cache_manager import CacheManager
-from dataweave.crawler.auth.auth_provider import AuthProvider
 from dataweave.api_client.models.site_profile_reponse import SiteProfileResponse
+from dataweave.cache.redis_cache_manager import RedisCacheManager
+from dataweave.crawler.auth.auth_provider import AuthProvider
 from dataweave.crawler.auth.crawl_auth_context import CrawlAuthContext
 
 
@@ -12,7 +12,7 @@ from dataweave.crawler.auth.crawl_auth_context import CrawlAuthContext
 class CrawlAuthManager:
 
     @inject
-    def __init__(self, auth_provider: AuthProvider, cache_manager: CacheManager):
+    def __init__(self, auth_provider: AuthProvider, cache_manager: RedisCacheManager):
         self.auth_provider = auth_provider
         self.cache_manager = cache_manager
 

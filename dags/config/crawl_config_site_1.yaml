@@ -28,7 +28,7 @@ siteProfiles:
     Accept: '*/*'
     Accept-Encoding: gzip, deflate
     Accept-Language: ko-KR,ko;q=0.9
-    Connection: close
+    Connection: keep-alive
     User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
       (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36
   mappingId: 5
@@ -153,10 +153,54 @@ siteProfiles:
     crawlType: API
   headers:
     Accept: '*/*'
+    Accept-Encoding: gzip, deflate, br
+    Accept-Language: en-US,en;q=0.9
+    Connection: close
+    User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)
+      Chrome/89.0.4389.82 Safari/537.36
+  mappingId: 7
+- crawlAuthSetting:
+    authEndpoint: https://m.web.mustit.co.kr
+    authHeaders: Authorization
+    authPayload: '{"Authorization": "Bearer some_token_value"}'
+    authType: COOKIE
+  crawlEndpoints:
+  - crawlTasks:
+    - action: API_CALL
+      endpointId: 21
+      params: '{"cursorId": "${cursor_id}", "pageSize": "${page_size}", "siteName":
+        "MUSTIT", "isProductGroupIdNull": "true"}'
+      responseMapping: '{}'
+      stepOrder: 1
+      target: PRODUCT
+      type: PROCESSING
+    - action: SAVE_S3
+      endpointId: 21
+      params: '{"siteProductId": "${crawl_product_sku}"}'
+      responseMapping: '{}'
+      stepOrder: 2
+      target: PRODUCT
+      type: CRAWLING
+    - action: SAVE_S3
+      endpointId: 21
+      params: '{"siteProductId": "${crawl_product_sku}"}'
+      responseMapping: '{}'
+      stepOrder: 3
+      target: PRODUCT
+      type: CRAWLING
+    endPointUrl: /mustit-api
+    endpointId: 21
+    parameters: ''
+  crawlSetting:
+    crawlFrequency: 10
+    crawlType: BEAUTIFUL_SOUP
+  headers:
+    Accept: '*/*'
     Accept-Encoding: gzip, deflate
     Accept-Language: ko-KR,ko;q=0.9
     Connection: close
     User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
       like Gecko) Chrome/90.0.4430.93 Safari/537.36
-  mappingId: 7
+  mappingId: 15
 siteType: CRAWL
+

@@ -5,6 +5,8 @@ from typing import Any
 from injector import inject, singleton, Injector
 
 from dataweave.api_client.models.crawl_task_reponse import CrawlTaskResponse
+from dataweave.api_client.models.site_context_response import SiteContextResponse
+from dataweave.api_client.models.site_profile_reponse import SiteProfileResponse
 from dataweave.aws.s3_upload_service import S3UploadService
 from dataweave.crawler.action.action_interface import ActionInterface
 
@@ -16,7 +18,13 @@ class SaveS3Actor(ActionInterface):
     def __init__(self, s3_upload_service: S3UploadService):
         self.s3_upload_service = s3_upload_service
 
-    async def action(self, site_id: int, site_name: str, data: Any, task: CrawlTaskResponse):
+    async def action(self, site_profile: SiteProfileResponse, site_context: SiteContextResponse,
+                     task: CrawlTaskResponse,  data: Any, previous_result: Any):
+
+        site_name = site_context.site_name
+        site_id = site_context.site_id
+
+
         data_with_metadata = {
             "metadata": {"site_id": site_id, "site_name": site_name, "actionTarget": task.target},
             "data": data

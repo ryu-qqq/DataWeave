@@ -19,3 +19,13 @@ class CrawlProductResponse:
             product_name=data.get("productName"),
             product_group_id=data.get("productGroupId")
         )
+
+    def to_dict(self) -> dict:
+        return {
+            "crawlProductId": self.crawl_product_id,
+            "siteId": self.site_id,
+            "siteName": self.site_name,
+            "siteProductId": self.site_product_id,
+            "productName": self.product_name,
+            "productGroupId": self.product_group_id
+        }

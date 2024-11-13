@@ -12,6 +12,8 @@ class S3UploadService:
     @inject
     def __init__(self, aws_client: AWSClient):
         self.aws_client = aws_client
+        self.aws_client = None
+
 
     async def upload_json_data(self, data, object_name):
         if isinstance(data, dict):

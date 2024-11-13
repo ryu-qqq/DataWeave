@@ -1,11 +1,13 @@
 import json
-from typing import Any, List
+from typing import Any
 
 from injector import singleton, inject
 from jsonpath_ng import parse
 
 from dataweave.api_client.models.crawl_task_reponse import CrawlTaskResponse
-from dataweave.cache.cache_manager import CacheManager
+from dataweave.api_client.models.site_context_response import SiteContextResponse
+from dataweave.api_client.models.site_profile_reponse import SiteProfileResponse
+from dataweave.cache.redis_cache_manager import RedisCacheManager
 from dataweave.crawler.action.action_interface import ActionInterface
 
 
@@ -13,10 +15,13 @@ from dataweave.crawler.action.action_interface import ActionInterface
 class SaveCacheActor(ActionInterface):
 
     @inject
-    def __init__(self, cache_manager: CacheManager):
+    def __init__(self, cache_manager: RedisCacheManager):
         self.__cache_manager = cache_manager
 
-    async def action(self, site_id: int, site_name: str, data: Any, task: CrawlTaskResponse):
+    async def action(self, site_profile: SiteProfileResponse, site_context: SiteContextResponse,
+                     task: CrawlTaskResponse,  data: Any, previous_result: Any):
+
+        site_name = site_context.site_name
         params = json.loads(task.params)
         key_field = params.get("key")
         value_field = params.get("value")
