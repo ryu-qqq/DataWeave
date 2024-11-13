@@ -27,5 +27,5 @@ class SiteProfileResponse:
             crawl_setting=CrawlSettingResponse.from_dict(data.get("crawlSetting", {})),
             crawl_auth_setting=CrawlAuthSettingResponse.from_dict(data.get("crawlAuthSetting", {})),
             crawl_endpoints=[CrawlEndpointResponse.from_dict(ep) for ep in data.get("crawlEndpoints", [])],
-            headers=data.get("headers", {})  # headers 필드 추가 및 기본값 설정
+            headers=data.get("headers", {})
         )

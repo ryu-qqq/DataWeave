@@ -33,7 +33,7 @@ services:
       MYSQL_USER: airflow
       MYSQL_PASSWORD: 12345
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 

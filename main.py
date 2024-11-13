@@ -4,7 +4,7 @@ from dataweave.api_client.models.crawl_auth_setting_response import CrawlAuthSet
 from dataweave.api_client.models.crawl_endpoint_response import CrawlEndpointResponse
 from dataweave.api_client.models.crawl_task_reponse import CrawlTaskResponse
 from dataweave.api_client.models.site_context_response import SiteContextResponse
-from dataweave.crawl_task_executor import CrawlTaskExecutor
+from dataweave.crawler.task.crawl_task_executor import CrawlTaskExecutor
 
 if __name__ == "__main__":
 

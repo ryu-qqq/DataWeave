@@ -13,6 +13,7 @@ class GoogleSearchConfig:
             load_dotenv(".env.prod")
         else:
             load_dotenv(".env.local")
+
         self.BASE_URL = os.getenv("GOOGLE_SEARCH_URL")
         self.API_KEY = os.getenv("GOOGLE_SEARCH_API")
         self.URL = f"{self.BASE_URL}?key={self.API_KEY}&cx=44d600842a2b74ed7&q="

@@ -2,6 +2,8 @@ import json
 from typing import Optional
 
 from injector import singleton, Injector, inject
+
+from dataweave.api_client.models.crawl_product_response import CrawlProductResponse
 from dataweave.api_client.models.slice import Slice
 from dataweave.api_client.models.product_hub_api_response import ApiResponse
 from dataweave.api_client.models.site_context_response import SiteContextResponse
@@ -28,8 +30,6 @@ class ProductHubApiClient:
         response_data = json.loads(response)
 
         if "data" in response_data:
-            from_dict = Slice.from_dict(response_data["data"], SiteResponse)
-            print(from_dict)
             return Slice.from_dict(response_data["data"], SiteResponse)
         else:
             raise ValueError("Unexpected response format")
@@ -42,6 +42,21 @@ class ProductHubApiClient:
         response_data = json.loads(response)
         api_response = ApiResponse.from_dict(response_data, data_class=SiteContextResponse)
         return api_response.data
+
+    def fetch_crawl_products_context(self, site_name: str, page_size: int,
+                                     cursor_id: Optional[int]) -> Slice:
+        url = f"{self.__base_url}/api/v1/site/crawl/product"
+        headers = {"Content-Type": "application/json"}
+
+        params = {"siteName": site_name, "cursorId": cursor_id, "pageSize": page_size}
+        response = self.__http_client.request("GET", url, headers=headers, params=params)
+
+        response_data = json.loads(response)
+
+        if "data" in response_data:
+            return Slice.from_dict(response_data["data"], CrawlProductResponse)
+        else:
+            raise ValueError("Unexpected response format")
 
 
 injector = Injector()

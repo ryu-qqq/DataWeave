@@ -1,53 +1,63 @@
 import logging
 from pathlib import Path
-from typing import Dict
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from airflow.utils.task_group import TaskGroup
+
 from dags.default_args import default_args
-from dataweave.api_client.models.crawl_auth_setting_response import CrawlAuthSettingResponse
-from dataweave.api_client.models.crawl_endpoint_response import CrawlEndpointResponse
 from dataweave.api_client.models.crawl_task_reponse import CrawlTaskResponse
 from dataweave.api_client.models.site_context_response import SiteContextResponse
 from dataweave.api_client.models.site_profile_reponse import SiteProfileResponse
 from dataweave.coroutine_utils import CoroutineUtils
-from dataweave.crawl_task_executor import CrawlTaskExecutor
+from dataweave.task_executor import TaskExecutor
 
 
-def perform_crawl_task(
-        crawl_type: str, headers: Dict[str, str],
-        site_context: SiteContextResponse, auth_settings: CrawlAuthSettingResponse,
-        crawl_end_point: CrawlEndpointResponse, task_info: CrawlTaskResponse, **context):
-    CoroutineUtils.run_async(
-        CrawlTaskExecutor.perform_crawling(
-            crawl_type=crawl_type,
-            headers=headers,
-            site_context=site_context,
-            auth_settings=auth_settings,
-            crawl_end_point=crawl_end_point,
-            task_info=task_info
-        )
+def fetch_previous_result(task_instance, task_id: str):
+    return task_instance.xcom_pull(task_ids=task_id)
+
+
+def perform_crawl_task(site_profile: SiteProfileResponse, site_context: SiteContextResponse, task_info: CrawlTaskResponse, **context):
+    task_instance = context['ti']
+    previous_result = fetch_previous_result(task_instance, task_instance.task_id)
+
+    executor = TaskExecutor(
+        site_profile=site_profile,
+        site_context=site_context,
+        task_info=task_info,
+        previous_result=previous_result
     )
+
+    result = CoroutineUtils.run_async(executor.execute())
+
+    if task_info.type == "PROCESSING":
+        task_instance.xcom_push(key="processing_result", value=result)
+    return result
 
 
 def create_site_profile_dag(dag_id: str, site_context: SiteContextResponse, site_profile: SiteProfileResponse) -> DAG:
     schedule_interval = f"*/{site_profile.crawl_setting.crawl_frequency} * * * *"
+
     with DAG(dag_id=dag_id, default_args=default_args(), schedule_interval=schedule_interval, catchup=False) as dag:
+        previous_task_id = None
         for endpoint in site_profile.crawl_endpoints:
             for task_info in endpoint.crawl_tasks:
-                PythonOperator(
-                    task_id=f"{dag_id}_endpoint_{endpoint.endpoint_id}_task_{task_info.step_order}",
+                task_id = f"{dag_id}_endpoint_{endpoint.endpoint_id}_task_{task_info.step_order}"
+
+                task = PythonOperator(
+                    task_id=task_id,
                     python_callable=perform_crawl_task,
                     op_kwargs={
-                        'crawl_type': site_profile.crawl_setting.crawl_type,
-                        'headers': site_profile.headers,
+                        'site_profile': site_profile,
                         'site_context': site_context,
-                        'auth_settings': site_profile.crawl_auth_setting,
-                        'crawl_end_point': endpoint,
                         'task_info': task_info
                     },
                     provide_context=True
                 )
+
+                if previous_task_id and task_info.type == "PROCESSING":
+                    task.set_upstream(previous_task_id)
+
+                previous_task_id = task_id if task_info.type == "PROCESSING" else previous_task_id
     return dag
 
 
