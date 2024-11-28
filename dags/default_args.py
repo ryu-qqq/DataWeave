@@ -1,5 +1,4 @@
 from datetime import datetime
-from airflow.settings import tz
 
 from dags.slack_notify import slack_failed_task_alert
 

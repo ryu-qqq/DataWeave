@@ -9,6 +9,8 @@ x-airflow-common: &airflow-common
     - AIRFLOW__CORE__LOAD_EXAMPLES=false
     - AIRFLOW__CORE__DEFAULT_TIMEZONE=Asia/Seoul
     - AIRFLOW__CORE__DAGS_FOLDER=/usr/src/app/dags
+    - AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT=30
+    - AIRFLOW__CORE__DAG_DIR_LIST_INTERVAL=30
     - PYTHONPATH=/usr/src/app:/usr/src/app/dataweave
     - ENVIRONMENT=local
     - AIRFLOW__CORE__BASE_LOG_FOLDER=/usr/src/app/logs
@@ -33,7 +35,7 @@ services:
       MYSQL_USER: airflow
       MYSQL_PASSWORD: 12345
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -65,6 +67,7 @@ services:
     depends_on:
       - mysql
       - initdb
+      - redis
     command: airflow scheduler
 
   worker:
@@ -75,6 +78,7 @@ services:
     depends_on:
       - mysql
       - initdb
+      - redis
     command: airflow celery worker
 
   redis:

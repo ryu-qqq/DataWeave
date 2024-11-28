@@ -15,8 +15,8 @@ class CookieAuthProvider(AuthInterface):
         self.cookie_manager = cookie_manager
         self.auth_headers = {}
 
-    async def authenticate(self, auth_endpoint: str, headers: Dict[str, str], auth_header: str, payload: str) -> Dict[
-        str, str]:
+    async def authenticate(self, auth_endpoint: str, headers: Dict[str, str], auth_header: str, payload: str) -> \
+            (Dict[str, str], int):
         cookies = await self.cookie_manager.get_cookies(auth_endpoint, headers)
         if not cookies:
             raise ValueError("Failed to retrieve cookies for authentication.")
@@ -24,7 +24,8 @@ class CookieAuthProvider(AuthInterface):
         auth_headers = self.set_dynamic_headers(auth_header, cookies, payload)
 
         headers.update(auth_headers)
-        return headers
+        ttl = 3600
+        return headers, ttl
 
     @staticmethod
     def set_dynamic_headers(auth_header: str, cookies: Dict[str, Any], payload: str) -> Dict[str, str]:

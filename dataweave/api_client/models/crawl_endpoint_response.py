@@ -20,5 +20,5 @@ class CrawlEndpointResponse:
             endpoint_id=data.get("endpointId"),
             end_point_url=data.get("endPointUrl"),
             parameters=data.get("parameters"),
-            crawl_tasks=[CrawlTaskResponse.from_dict(task) for task in data.get("crawlTasks", [])]
+            crawl_tasks=[CrawlTaskResponse.from_dict(task, data.get("endPointUrl")) for task in data.get("crawlTasks", [])]
         )

@@ -13,8 +13,6 @@ from dataweave.sync_session_manager import SyncSessionManager
 @singleton
 class SyncHttpClient(HttpClient):
 
-
-
     def __init__(self, proxy_manager: Optional[ProxyManager] = None):
         super().__init__(SyncSessionManager(), proxy_manager=proxy_manager)
 

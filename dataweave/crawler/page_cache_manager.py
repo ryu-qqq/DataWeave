@@ -24,11 +24,16 @@ class PageCacheManager:
                 page_key: cached_data.get(page_key, 0),
                 size_key: cached_data.get(size_key, 20)
             }
-
-        return {page_key: 0, size_key: 20}
+        else:
+            if site_name == "MUSTIT":
+                return {page_key: 0, size_key: 20}
+            else:
+                return {page_key: 1, size_key: 20}
 
     async def update_params(self, site_name: str, endpoint: str, page_no: int, page_size: int,
                             dynamic_keys: Dict[str, str]):
         key = f"{site_name}:{endpoint}"
         new_data = {dynamic_keys["page_key"]: page_no, dynamic_keys["size_key"]: page_size}
         await self.__cache_manager.set(key, json.dumps(new_data))
+
+

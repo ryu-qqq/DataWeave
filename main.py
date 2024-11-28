@@ -1,40 +1,18 @@
 import asyncio
+import json
 
-from dataweave.api_client.product_hub_api_client import product_hub_api_client
+from dataweave.api_client.models.crawl_auth_setting_response import CrawlAuthSettingResponse
+from dataweave.api_client.models.crawl_endpoint_response import CrawlEndpointResponse
+from dataweave.api_client.models.site_profile_reponse import SiteProfileResponse
+from dataweave.crawler.task.crawl_task_executor import CrawlTaskExecutor, crawl_task_executor
+from dataweave.processor.batch_process_manager import batch_processor_manager
+from dataweave.api_client.models.crawl_task_reponse import CrawlTaskResponse
+from dataweave.api_client.models.site_context_response import SiteContextResponse
+from dataweave.processor.batch_processor import batch_processor
+from dataweave.processor.batch_status_checker import batch_status_checker
 
 if __name__ == "__main__":
-    # task = CrawlTaskResponse(endpoint_id="1", step_order=1, task_type="NONE", action_target="",
-    #                              action_type="SAVE_S3", params="{}", response_mapping="{\"items\": \"$.items[*]\"}")
-    #
-    # headers = {
-    #                 "Sec-Ch-Ua": "\"Chromium\";v=\"124\", \"Google Chrome\";v=\"124\", \"Not-A.Brand\";v=\"99\"",
-    #                 "Accept": "*/*",
-    #                 "Sec-Ch-Ua-Platform": "\"macOS\"",
-    #                 "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15",
-    #                 "Accept-Encoding": "gzip, deflate",
-    #                 "Accept-Language": "en-US,en;q=0.9"
-    #             }
-    #
-    # auth_settings = CrawlAuthSettingResponse(
-    #     auth_type="COOKIE",
-    #     auth_endpoint="https://m.web.mustit.co.kr",
-    #     auth_headers="Authorization",
-    #     auth_payload="\"${token_type} ${token}\""
-    # )
-    #
-    # request = CrawlTaskRequest(
-    #     site_name="MUSTIT",
-    #     crawl_type="API",
-    #     base_url="https://m.web.mustit.co.kr",
-    #     end_point_url="/mustit-api/facade-api/v1/search/mini-shop-search",
-    #     parameters="sellerId=wdrobe&pageNo={}&pageSize={}&order=LATEST",
-    #     task=task,
-    #     headers=headers,
-    #     auth_settings=auth_settings,
-    #     previous_result=None
-    # )
-
-    product_hub_api_client.fetch_sites(site_type="CRAWL")
-
-
+    batch_processor.process(site_id=4, seller_id=28, page_size=100)
+    #asyncio.run(batch_status_checker.check_and_update_batch_states())
+    #asyncio.run(batch_processor_manager.process_completed_batches())
 

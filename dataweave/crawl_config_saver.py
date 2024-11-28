@@ -1,6 +1,7 @@
 import yaml
 from dataweave.api_client.models.site_context_response import SiteContextResponse
 
+
 class CrawlConfigSaver:
     @staticmethod
     def save_to_yaml(site_context: SiteContextResponse, file_path):

@@ -1,0 +1,35 @@
+baseUrl: https://shop-api.e-ncp.com
+countryCode: KR
+siteId: 2
+siteName: KASINA
+siteProfiles:
+- crawlAuthSetting:
+    authEndpoint: ''
+    authHeaders: ''
+    authPayload: '{"version": "1.0", "clientid": "183SVEgDg5nHbILW//3jvg==", "platform":
+      "PC"}'
+    authType: NONE
+  crawlEndpoints:
+  - crawlTasks:
+    - action: SAVE_S3
+      endpointId: 13
+      params: '{}'
+      responseMapping: '{"items": "$.items[*]"}'
+      stepOrder: 1
+      target: RAW_DATA
+      type: CRAWLING
+    endPointUrl: /products/search
+    endpointId: 13
+    parameters: categoryNos=791683&order.direction=DESC&pageNumber={}&pageSize={}
+  crawlSetting:
+    crawlFrequency: 10
+    crawlType: API
+  headers:
+    Accept: '*/*'
+    Accept-Encoding: gzip, deflate
+    Accept-Language: ko-KR,ko;q=0.9
+    Connection: keep-alive
+    User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+      like Gecko) Chrome/90.0.4430.93 Safari/537.36
+  mappingId: 8
+siteType: CRAWL

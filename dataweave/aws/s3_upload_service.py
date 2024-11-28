@@ -12,10 +12,11 @@ class S3UploadService:
     @inject
     def __init__(self, aws_client: AWSClient):
         self.aws_client = aws_client
+        self.aws_client = None
 
     async def upload_json_data(self, data, object_name):
         if isinstance(data, dict):
-            data = json.dumps(data)
+            data = json.dumps(data, ensure_ascii=False)
 
         data_bytes = BytesIO(data.encode('utf-8'))
 

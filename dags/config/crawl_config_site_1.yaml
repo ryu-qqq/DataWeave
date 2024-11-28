@@ -11,116 +11,27 @@ siteProfiles:
   crawlEndpoints:
   - crawlTasks:
     - action: SAVE_S3
-      endpointId: 75
+      endpointId: 2
       params: '{}'
-      responseMapping: '{"items": "$.items[*]"}'
+      responseMapping: '{"brands": "$.english.*[*].{''brandNo'': brandNo, ''brandNameEng'':
+        brandNameEng, ''brandNameKor'': brandNameKor, ''keyword'': keyword}"}'
       stepOrder: 1
-      target: RAW_DATA
+      target: BRAND
       type: CRAWLING
-    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
-    endpointId: 75
-    parameters: sellerId=bino2345&pageNo={}&pageSize={}&order=LATEST
-  - crawlTasks:
-    - action: SAVE_S3
-      endpointId: 76
-      params: '{}'
-      responseMapping: '{"items": "$.items[*]"}'
-      stepOrder: 1
-      target: RAW_DATA
-      type: CRAWLING
-    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
-    endpointId: 76
-    parameters: sellerId=ccapsule1&pageNo={}&pageSize={}&order=LATEST
-  - crawlTasks:
-    - action: SAVE_S3
-      endpointId: 77
-      params: '{}'
-      responseMapping: '{"items": "$.items[*]"}'
-      stepOrder: 1
-      target: RAW_DATA
-      type: CRAWLING
-    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
-    endpointId: 77
-    parameters: sellerId=fixedone&pageNo={}&pageSize={}&order=LATEST
-  - crawlTasks:
-    - action: SAVE_S3
-      endpointId: 78
-      params: '{}'
-      responseMapping: '{"items": "$.items[*]"}'
-      stepOrder: 1
-      target: RAW_DATA
-      type: CRAWLING
-    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
-    endpointId: 78
-    parameters: sellerId=italiagom&pageNo={}&pageSize={}&order=LATEST
-  - crawlTasks:
-    - action: SAVE_S3
-      endpointId: 79
-      params: '{}'
-      responseMapping: '{"items": "$.items[*]"}'
-      stepOrder: 1
-      target: RAW_DATA
-      type: CRAWLING
-    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
-    endpointId: 79
-    parameters: sellerId=LIKEASTAR&pageNo={}&pageSize={}&order=LATEST
-  - crawlTasks:
-    - action: SAVE_S3
-      endpointId: 80
-      params: '{}'
-      responseMapping: '{"items": "$.items[*]"}'
-      stepOrder: 1
-      target: RAW_DATA
-      type: CRAWLING
-    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
-    endpointId: 80
-    parameters: sellerId=thefactor2&pageNo={}&pageSize={}&order=LATEST
-  - crawlTasks:
-    - action: SAVE_S3
-      endpointId: 81
-      params: '{}'
-      responseMapping: '{"items": "$.items[*]"}'
-      stepOrder: 1
-      target: RAW_DATA
-      type: CRAWLING
-    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
-    endpointId: 81
-    parameters: sellerId=viaitalia&pageNo={}&pageSize={}&order=LATEST
-  - crawlTasks:
-    - action: SAVE_S3
-      endpointId: 82
-      params: '{}'
-      responseMapping: '{"items": "$.items[*]"}'
-      stepOrder: 1
-      target: RAW_DATA
-      type: CRAWLING
-    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
-    endpointId: 82
-    parameters: sellerId=wdrobe&pageNo={}&pageSize={}&order=LATEST
-  - crawlTasks:
-    - action: SAVE_S3
-      endpointId: 83
-      params: '{}'
-      responseMapping: '{"items": "$.items[*]"}'
-      stepOrder: 1
-      target: RAW_DATA
-      type: CRAWLING
-    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
-    endpointId: 83
-    parameters: sellerId=BONTANO&pageNo={}&pageSize={}&order=LATEST
+    endPointUrl: /mustit-api/legacy-api/v1/brands
+    endpointId: 2
+    parameters: ''
   crawlSetting:
     crawlFrequency: 10
     crawlType: API
   headers:
     Accept: '*/*'
-    Accept-Encoding: gzip, deflate, br
-    Sec-Ch-Ua-Mobile: ?0
-    Sec-Ch-Ua-Platform: '"macOS"'
-    Sec-Fetch-Mode: navigate
-    Sec-Fetch-Site: same-origin
-    User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
-      (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36
-  mappingId: 1
+    Accept-Encoding: gzip, deflate
+    Accept-Language: ko-KR,ko;q=0.9
+    Connection: close
+    User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+      like Gecko) Chrome/90.0.4430.93 Safari/537.36
+  mappingId: 5
 - crawlAuthSetting:
     authEndpoint: https://m.web.mustit.co.kr
     authHeaders: Authorization
@@ -129,29 +40,166 @@ siteProfiles:
   crawlEndpoints:
   - crawlTasks:
     - action: SAVE_S3
-      endpointId: 65
+      endpointId: 3
       params: '{}'
-      responseMapping: '{"brandNo": "$.english.*[*].brandNo", "keyword": "$.english.*[*].keyword",
-        "brandNameEng": "$.english.*[*].brandNameEng", "brandNameKor": "$.english.*[*].brandNameKor"}'
+      responseMapping: '{"items": "$.items[*]"}'
       stepOrder: 1
       target: RAW_DATA
       type: CRAWLING
-    endPointUrl: /mustit-api/legacy-api/v1/brands
-    endpointId: 65
-    parameters: ''
+    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
+    endpointId: 3
+    parameters: sellerId=bino2345&pageNo={}&pageSize={}&order=LATEST
+  - crawlTasks:
+    - action: SAVE_S3
+      endpointId: 4
+      params: '{}'
+      responseMapping: '{"items": "$.items[*]"}'
+      stepOrder: 1
+      target: RAW_DATA
+      type: CRAWLING
+    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
+    endpointId: 4
+    parameters: sellerId=ccapsule1&pageNo={}&pageSize={}&order=LATEST
+  - crawlTasks:
+    - action: SAVE_S3
+      endpointId: 5
+      params: '{}'
+      responseMapping: '{"items": "$.items[*]"}'
+      stepOrder: 1
+      target: RAW_DATA
+      type: CRAWLING
+    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
+    endpointId: 5
+    parameters: sellerId=fixedone&pageNo={}&pageSize={}&order=LATEST
+  - crawlTasks:
+    - action: SAVE_S3
+      endpointId: 6
+      params: '{}'
+      responseMapping: '{"items": "$.items[*]"}'
+      stepOrder: 1
+      target: RAW_DATA
+      type: CRAWLING
+    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
+    endpointId: 6
+    parameters: sellerId=italiagom&pageNo={}&pageSize={}&order=LATEST
+  - crawlTasks:
+    - action: SAVE_S3
+      endpointId: 7
+      params: '{}'
+      responseMapping: '{"items": "$.items[*]"}'
+      stepOrder: 1
+      target: RAW_DATA
+      type: CRAWLING
+    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
+    endpointId: 7
+    parameters: sellerId=LIKEASTAR&pageNo={}&pageSize={}&order=LATEST
+  - crawlTasks:
+    - action: SAVE_S3
+      endpointId: 8
+      params: '{}'
+      responseMapping: '{"items": "$.items[*]"}'
+      stepOrder: 1
+      target: RAW_DATA
+      type: CRAWLING
+    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
+    endpointId: 8
+    parameters: sellerId=thefactor2&pageNo={}&pageSize={}&order=LATEST
+  - crawlTasks:
+    - action: SAVE_S3
+      endpointId: 9
+      params: '{}'
+      responseMapping: '{"items": "$.items[*]"}'
+      stepOrder: 1
+      target: RAW_DATA
+      type: CRAWLING
+    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
+    endpointId: 9
+    parameters: sellerId=viaitalia&pageNo={}&pageSize={}&order=LATEST
+  - crawlTasks:
+    - action: SAVE_S3
+      endpointId: 10
+      params: '{}'
+      responseMapping: '{"items": "$.items[*]"}'
+      stepOrder: 1
+      target: RAW_DATA
+      type: CRAWLING
+    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
+    endpointId: 10
+    parameters: sellerId=wdrobe&pageNo={}&pageSize={}&order=LATEST
+  - crawlTasks:
+    - action: SAVE_S3
+      endpointId: 11
+      params: '{}'
+      responseMapping: '{"items": "$.items[*]"}'
+      stepOrder: 1
+      target: RAW_DATA
+      type: CRAWLING
+    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
+    endpointId: 11
+    parameters: sellerId=BONTANO&pageNo={}&pageSize={}&order=LATEST
+  - crawlTasks:
+    - action: SAVE_S3
+      endpointId: 12
+      params: '{}'
+      responseMapping: '{"items": "$.items[*]"}'
+      stepOrder: 1
+      target: RAW_DATA
+      type: CRAWLING
+    endPointUrl: /mustit-api/facade-api/v1/search/mini-shop-search
+    endpointId: 12
+    parameters: sellerId=bino2345&pageNo={}&pageSize={}&order=LATEST
   crawlSetting:
     crawlFrequency: 10
     crawlType: API
   headers:
     Accept: '*/*'
-    Accept-Encoding: gzip, deflate, br
-    Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+    Accept-Encoding: gzip, deflate
+    Accept-Language: ko-KR,ko;q=0.9
     Connection: keep-alive
-    Sec-Ch-Ua: '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
-    Sec-Ch-Ua-Platform: '"macOS"'
-    Sec-Fetch-Mode: navigate
-    Sec-Fetch-Site: same-origin
-    User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
-      (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36
-  mappingId: 2
+    User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)
+      Chrome/89.0.4389.82 Safari/537.36
+  mappingId: 7
+- crawlAuthSetting:
+    authEndpoint: https://m.web.mustit.co.kr
+    authHeaders: Authorization
+    authPayload: '{"Authorization": "Bearer some_token_value"}'
+    authType: COOKIE
+  crawlEndpoints:
+  - crawlTasks:
+    - action: API_CALL
+      endpointId: 21
+      params: '{"cursorId": "${cursor_id}", "pageSize": "${page_size}", "siteName":
+        "MUSTIT", "isProductGroupIdNull": "true"}'
+      responseMapping: '{}'
+      stepOrder: 1
+      target: PRODUCT
+      type: PROCESSING
+    - action: SAVE_S3
+      endpointId: 21
+      params: '{"siteProductId": "${crawl_product_sku}"}'
+      responseMapping: '{}'
+      stepOrder: 2
+      target: PRODUCT
+      type: CRAWLING
+    - action: SAVE_S3
+      endpointId: 21
+      params: '{"siteProductId": "${crawl_product_sku}"}'
+      responseMapping: '{}'
+      stepOrder: 3
+      target: PRODUCT
+      type: CRAWLING
+    endPointUrl: /mustit-api
+    endpointId: 21
+    parameters: ''
+  crawlSetting:
+    crawlFrequency: 10
+    crawlType: BEAUTIFUL_SOUP
+  headers:
+    Accept: '*/*'
+    Accept-Encoding: gzip, deflate, br
+    Accept-Language: en-US,en;q=0.9
+    Connection: keep-alive
+    User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)
+      Chrome/89.0.4389.82 Safari/537.36
+  mappingId: 15
 siteType: CRAWL

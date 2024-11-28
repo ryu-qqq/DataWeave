@@ -31,4 +31,17 @@ class Slice(Generic[T]):
             total_elements=data.get("totalElements")
         )
 
+    def to_dict(self):
+        return {
+            "content": [item.to_dict() for item in self.content],
+            "last": self.last,
+            "first": self.first,
+            "sort": self.sort,
+            "size": self.size,
+            "numberOfElements": self.number_of_elements,
+            "empty": self.empty,
+            "cursor": self.cursor,
+            "totalElements": self.total_elements
+        }
+
 
