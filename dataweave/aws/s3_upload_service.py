@@ -14,7 +14,6 @@ class S3UploadService:
         self.aws_client = aws_client
         self.aws_client = None
 
-
     async def upload_json_data(self, data, object_name):
         if isinstance(data, dict):
             data = json.dumps(data, ensure_ascii=False)
