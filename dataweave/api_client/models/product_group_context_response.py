@@ -73,7 +73,7 @@ class ProductResponse:
     sold_out_yn: bool
     display_yn: bool
     option: str
-    options: Set[OptionResponse]
+    options: List[OptionResponse]
     additional_price: Decimal
 
     @staticmethod
@@ -85,7 +85,7 @@ class ProductResponse:
             sold_out_yn=data["soldOutYn"],
             display_yn=data["displayYn"],
             option=data["option"],
-            options={OptionResponse.from_dict(option) for option in data["options"]},
+            options=[OptionResponse.from_dict(option) for option in data["options"]],
             additional_price=Decimal(data["additionalPrice"])
         )
 

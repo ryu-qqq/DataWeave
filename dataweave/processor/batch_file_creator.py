@@ -7,8 +7,7 @@ from typing import List
 
 from injector import singleton
 
-from dataweave.api_client.models.product_group_context_response import ProductGroupProcessingDataResponse, \
-    GptTrainingDataResponse
+from dataweave.api_client.models.product_group_context_response import GptTrainingDataResponse
 from dataweave.enums.product_data_type import ProductDataType
 from dataweave.processor.question_provider_factory import QuestionProviderFactory
 from dataweave.processor.token_counter import TokenCounter
@@ -21,7 +20,7 @@ class BatchFileCreator:
         self.base_dir = os.path.join(os.getcwd(), "batch", "processing")
         os.makedirs(self.base_dir, exist_ok=True)
 
-    def create_batch_file(self, data: List[ProductGroupProcessingDataResponse], data_type: ProductDataType) -> str:
+    def create_batch_file(self, data: List[GptTrainingDataResponse], data_type: ProductDataType) -> str:
         try:
 
             file_path = self.generate_file_path(data_type)

@@ -12,7 +12,7 @@ from dataweave.processor.batch_processor import batch_processor
 from dataweave.processor.batch_status_checker import batch_status_checker
 
 if __name__ == "__main__":
-    batch_processor.process(site_id=4, seller_id=28, page_size=100)
+    #batch_processor.process(site_id=4, seller_id=31, page_size=500)
     #asyncio.run(batch_status_checker.check_and_update_batch_states())
-    #asyncio.run(batch_processor_manager.process_completed_batches())
+    asyncio.run(batch_processor_manager.process_completed_batches())
 

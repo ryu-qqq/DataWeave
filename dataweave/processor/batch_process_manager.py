@@ -33,7 +33,7 @@ class BatchProcessorManager:
     async def process_completed_batches(self):
         logging.info("Fetching and processing completed batches...")
 
-        completed_batches = await self.batch_id_manager.list_batches_by_status(BatchStatus.COMPLETED)
+        completed_batches = await self.batch_id_manager.list_batches_by_status(BatchStatus.FAILED)
         logging.info(f"Found {len(completed_batches)} completed batches.")
 
         for batch in completed_batches:
