@@ -3,12 +3,15 @@ from pathlib import Path
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-from dags.default_args import default_args
+from dags.dag_factory import create_dag
 from dataweave.api_client.product_hub_api_client import product_hub_api_client
 from dataweave.crawl_config_saver import CrawlConfigSaver
 
 
 def fetch_and_save_config():
+    """
+    Fetches site configurations from the API and saves them as YAML files.
+    """
     sites = product_hub_api_client.fetch_sites(site_type="CRAWL")
 
     for site in sites.content:
@@ -18,13 +21,20 @@ def fetch_and_save_config():
         CrawlConfigSaver.save_to_yaml(site_context, file_path)
 
 
-with DAG(
-        dag_id="sync_crawl_config",
-        default_args=default_args(),
-        schedule_interval="0 * * * *",
-        catchup=False,
-) as dag:
-    fetch_config_task = PythonOperator(
-        task_id="fetch_and_save_config",
-        python_callable=fetch_and_save_config,
-    )
+task_definitions = [
+    {
+        "task_id": "fetch_and_save_config",
+        "operator": PythonOperator,
+        "callable": fetch_and_save_config,
+        "op_kwargs": {},
+    }
+]
+
+sync_crawl_config_dag = create_dag(
+    dag_id="sync_crawl_config",
+    schedule_interval="0 * * * *",
+    task_definitions=task_definitions
+)
+
+
+globals()["sync_crawl_config"] = sync_crawl_config_dag

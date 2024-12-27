@@ -29,7 +29,7 @@ class ApiCrawler(ApiCrawlerInterface):
         headers = headers or {"Content-Type": "application/json"}
         logging.info(f"Using headers: {headers}")
 
-        cached_params = {"pageNo": 0, "pageSize": 20}
+        cached_params = {"pageNo": 0, "pageSize": 20 }
 
         if parameters:
             dynamic_keys = self.extract_dynamic_keys(parameters)

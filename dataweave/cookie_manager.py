@@ -4,7 +4,6 @@ from typing import Dict, Any
 from injector import singleton, inject
 
 from dataweave.async_http_client import AsyncHttpClient
-from dataweave.sync_http_client import SyncHttpClient
 
 
 @singleton

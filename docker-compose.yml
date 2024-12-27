@@ -19,6 +19,12 @@ x-airflow-common: &airflow-common
     - AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER=/usr/src/app/logs
     - AIRFLOW__WEBSERVER__SECRET_KEY=mysecretkey
     - SPRING_SERVER_HOST=http://host.docker.internal:8081
+    - AIRFLOW__METRICS__METRICS_EXPORTER=prometheus
+    - AIRFLOW__METRICS__METRICS_ALLOW_LIST=*
+    - AIRFLOW__METRICS__STATSD_HOST=statsd
+    - AIRFLOW__METRICS__STATSD_PORT=9125
+    - AIRFLOW__METRICS__STATSD_ON=True
+    - AIRFLOW__METRICS__STATSD_PREFIX=airflow
 
   volumes:
     - ./logs:/usr/src/app/logs
@@ -55,6 +61,8 @@ services:
     depends_on:
       - mysql
       - initdb
+      - statsd-exporter
+
     ports:
       - "8080:8080"
     command: airflow webserver
@@ -68,6 +76,8 @@ services:
       - mysql
       - initdb
       - redis
+      - statsd-exporter
+
     command: airflow scheduler
 
   worker:
@@ -79,12 +89,34 @@ services:
       - mysql
       - initdb
       - redis
+      - statsd-exporter
+
     command: airflow celery worker
 
   redis:
     image: redis:latest
     ports:
       - "6379:6379"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+  statsd-exporter:
+    image: prom/statsd-exporter:latest
+    container_name: statsd-exporter
+    ports:
+      - "9125:9125/udp"
+      - "9102:9102"
+    command: "--statsd.mapping-config=/etc/statsd/mapping.yml"
+    volumes:
+      - ./prometheus/mapping.yml:/etc/statsd/mapping.yml
 
 volumes:
   mysql_data:
