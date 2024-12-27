@@ -19,11 +19,10 @@ class SaveS3Actor(ActionInterface):
         self.s3_upload_service = s3_upload_service
 
     async def action(self, site_profile: SiteProfileResponse, site_context: SiteContextResponse,
-                     task: CrawlTaskResponse,  data: Any, previous_result: Any):
+                     task: CrawlTaskResponse, data: Any, previous_result: Any):
 
         site_name = site_context.site_name
         site_id = site_context.site_id
-
 
         data_with_metadata = {
             "metadata": {"site_id": site_id, "site_name": site_name, "actionTarget": task.target},

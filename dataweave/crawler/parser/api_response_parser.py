@@ -2,6 +2,7 @@ import json
 from typing import List, Dict, Any
 from jsonpath_ng import parse
 
+
 class ApiResponseParser:
     def __init__(self, response_mapping: str):
         self.mapping = json.loads(response_mapping)

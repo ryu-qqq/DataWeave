@@ -61,7 +61,7 @@ class CrawlTaskExecutor(TaskInterface):
                     results.append(result)
 
                 logging.info(f"Crawl completed for multiple endpoints in {task_info.endpoint_id}")
-                return results  # 반복 크롤링 결과 반환
+                return results
 
             else:
                 crawl_data = await crawler.crawl(
@@ -86,7 +86,7 @@ class CrawlTaskExecutor(TaskInterface):
                 )
 
                 logging.info(f"Crawl completed for single endpoint in {task_info.endpoint_id}")
-                return result  # 기본 크롤링 결과 반환
+                return result
 
         except Exception as e:
             logging.error(f"Failed to perform crawling: {e}")

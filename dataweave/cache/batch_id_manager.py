@@ -6,7 +6,7 @@ from injector import singleton, inject
 
 from dataweave.cache.redis_cache_manager import RedisCacheManager
 from dataweave.enums.batch_status import BatchStatus
-from dataweave.processor.batch_models import Batch
+from dataweave.gpt.batch_models import Batch
 
 
 @singleton

@@ -1,10 +1,8 @@
-import json
 import logging
 
+from injector import singleton, inject
 from openai import Client
 from openai import File
-
-from injector import singleton, inject
 
 from dataweave.api_client.openai_config import OpenAiConfig
 
@@ -48,7 +46,6 @@ class OpenAIClient:
             logging.error(f"Failed to download output for file ID {output_file_id}: {e}")
             raise
 
-
-    def list_batches(self, limit: int = 10) -> dict:
+    def list_batches(self, limit: int = 100) -> dict:
         response = self.client.batches.list(limit=limit)
         return response

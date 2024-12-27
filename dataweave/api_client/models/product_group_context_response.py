@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import List, Optional, Set
 
+
 @dataclass
 class BrandResponse:
     brand_id: int
@@ -208,8 +209,10 @@ class ProductGroupResponse:
             display_yn=data["displayYn"],
             product_status=data["productStatus"],
             keywords=data["keywords"],
-            product_delivery=ProductDeliveryResponse.from_dict(data["productDelivery"]) if data.get("productDelivery") else None,
-            product_notice=ProductNoticeResponse.from_dict(data["productNotice"]) if data.get("productNotice") else None,
+            product_delivery=ProductDeliveryResponse.from_dict(data["productDelivery"]) if data.get(
+                "productDelivery") else None,
+            product_notice=ProductNoticeResponse.from_dict(data["productNotice"]) if data.get(
+                "productNotice") else None,
             product_detail_description=data.get("productDetailDescription"),
             product_images=[
                 ProductGroupImageResponse.from_dict(image) for image in data.get("productImages", [])

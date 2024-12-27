@@ -1,16 +1,17 @@
 import json
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 from injector import singleton, Injector, inject
 
 from dataweave.api_client.models.crawl_product_response import CrawlProductResponse
+from dataweave.api_client.models.git_event_context_response import GitEventContextResponse
 from dataweave.api_client.models.product_group_context_response import GptTrainingDataResponse
 from dataweave.api_client.models.product_hub_api_response import ApiResponse
 from dataweave.api_client.models.site_context_response import SiteContextResponse
 from dataweave.api_client.models.site_response import SiteResponse
 from dataweave.api_client.models.slice import Slice
 from dataweave.api_client.product_hub_config import ProductHubConfig
-from dataweave.processor.batch_product_models import BatchProductModel
+from dataweave.gpt.batch_product_models import BatchProductModel
 from dataweave.sync_http_client import SyncHttpClient
 
 
@@ -61,11 +62,11 @@ class ProductHubApiClient:
         else:
             raise ValueError("Unexpected response format")
 
-    def fetch_product_group_processing_data(self, site_id: int, seller_id: int, cursor: int, status: str, page_size: int) -> Slice:
+    def fetch_product_group_processing_data(self, seller_id: int, cursor: int, status: str, page_size: int) -> Slice:
 
         url = f"{self.__base_url}/api/v1/product/processing-waiting"
         headers = {"Content-Type": "application/json"}
-        params = {"siteId": site_id, "sellerId": seller_id, "productStatus": status, "cursorId": cursor, "pageSize": page_size}
+        params = {"sellerId": seller_id, "productStatus": status, "cursorId": cursor, "pageSize": page_size}
         response = self.__http_client.request("GET", url, headers=headers, params=params)
 
         response_data = json.loads(response)
@@ -81,6 +82,22 @@ class ProductHubApiClient:
 
         request_body = self._convert_to_camel_case(processed_data)
         self.__http_client.request("POST", url, headers=headers, data=json.dumps(request_body))
+
+    def fetch_git_events(self, status: str, change_types: List[str], page_size: int, page_number: int, cursor: int,
+                         sort: str) -> Slice:
+
+        url = f"{self.__base_url}/api/v1/git-events"
+        headers = {"Content-Type": "application/json"}
+        params = {"gitEventStatus": status, "change_types": change_types, "pageSize": page_size,
+                  "pageNumber": page_number, "cursorId": cursor, "sort": sort}
+        response = self.__http_client.request("GET", url, headers=headers, params=params)
+
+        response_data = json.loads(response)
+
+        if "data" in response_data:
+            return Slice.from_dict(response_data["data"], GitEventContextResponse)
+        else:
+            raise ValueError("Unexpected response format")
 
     def _convert_to_camel_case(self, processed_datas: BatchProductModel) -> dict:
         serialized_data = processed_datas.to_dict()

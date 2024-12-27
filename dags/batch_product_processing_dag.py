@@ -1,21 +1,45 @@
-from airflow import DAG
+import asyncio
+
 from airflow.operators.python import PythonOperator
 
-from dags.default_args import default_args
-from dataweave.processor.batch_processor import batch_processor
+from dags.dag_factory import create_dag
+from dataweave.enums.product_data_type import BatchDataType
+from dataweave.enums.source_type import SourceType
+from dataweave.gpt.batch_processor import batch_processor
 
 
-def open_api_batch_completed_handling():
-    batch_processor.process(site_id=None, seller_id=None)
+def process_product_batches():
+    asyncio.run(batch_processor.process(
+        source_type=SourceType.PRODUCT,
+        fetch_params={
+            "status": "PENDING",
+            "change_types": ["ADDED", "MODIFIED"],
+            "page_size": 20,
+            "page_number": 0,
+            "cursor": None,
+            "sort": "ASC"
+        },
+        batch_data_type=BatchDataType.TITLE
+    ))
 
 
-with DAG(
-        dag_id="open_api_batch_completed_handling",
-        default_args=default_args(),
-        schedule_interval="*/30 * * * *",
-        catchup=False,
-) as dag:
-    fetch_config_task = PythonOperator(
-        task_id="open_api_batch_completed_handling",
-        python_callable=open_api_batch_completed_handling,
-    )
+dag_id = "product_batch_dag"
+schedule_interval = "0 * * * *"
+
+task_definitions = [
+    {
+        "task_id": "process_test_code_batches",
+        "operator": PythonOperator,
+        "callable": process_product_batches,
+        "op_kwargs": {}
+    }
+]
+
+product_batch_dag = create_dag(
+    dag_id=dag_id,
+    schedule_interval=schedule_interval,
+    task_definitions=task_definitions
+)
+
+# DAG 등록
+globals()[dag_id] = product_batch_dag
