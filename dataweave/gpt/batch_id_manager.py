@@ -6,7 +6,8 @@ from injector import singleton, inject
 
 from dataweave.cache.redis_cache_manager import RedisCacheManager
 from dataweave.enums.batch_status import BatchStatus
-from dataweave.gpt.batch_models import Batch
+from dataweave.gpt.models.batch_models import Batch
+from dataweave.gpt.models.prompt_models import TestCodeMetadata
 
 
 @singleton
@@ -36,18 +37,29 @@ class BatchIdManager:
         if isinstance(data, str):
             data = json.loads(data)
         if data:
-            return Batch(**data)
+            return Batch.from_dict(data, TestCodeMetadata)
         return None
 
     async def update_batch_status(self, batch: Batch, status: BatchStatus) -> None:
         existing_batch = await self.get_batch(batch.batch_id)
         if existing_batch:
             existing_batch.update_status(status)
-            existing_batch.data = batch.data
             await self.save_batch(existing_batch)
-            logging.info(f"Batch '{batch.batch_id}' updated to status '{status}' with additional data: {batch.data}")
+            logging.info(f"Batch '{batch.batch_id}' updated to status '{status}' ")
         else:
             logging.warning(f"Batch '{batch.batch_id}' not found for status update")
+
+    async def update_batch(self, updated_batch: Batch) -> None:
+        existing_batch = await self.get_batch(updated_batch.batch_id)
+        if existing_batch:
+            for field_name, field_value in vars(updated_batch).items():
+                if field_value is not None:
+                    setattr(existing_batch, field_name, field_value)
+
+            await self.save_batch(existing_batch)
+            logging.info(f"Batch '{updated_batch.batch_id}' updated and saved successfully.")
+        else:
+            logging.warning(f"Batch '{updated_batch.batch_id}' not found for update")
 
     async def batch_exists(self, batch_id: str) -> bool:
         key = self._generate_key(batch_id)
@@ -62,8 +74,23 @@ class BatchIdManager:
             data = await self.__cache_manager.get(key)
             if isinstance(data, str):
                 data = json.loads(data)
-            batch = Batch(**data)
-            if batch.status == status.name:
+            batch = Batch.from_dict(data, TestCodeMetadata)
+            if batch.status == status:
                 batches.append(batch)
 
         return batches
+
+    async def list_related_batches(self, id: str) -> List[Batch]:
+        pattern = f"{self.__namespace}:*"
+        keys = await self.__cache_manager.scan(pattern=pattern, count=10)
+        related_batches = []
+
+        for key in keys:
+            data = await self.__cache_manager.get(key)
+            if isinstance(data, str):
+                data = json.loads(data)
+            batch = Batch.from_dict(data, TestCodeMetadata)
+            if batch.batch_id == id:
+                related_batches.append(batch)
+
+        return related_batches

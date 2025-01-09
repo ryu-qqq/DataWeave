@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from airflow import DAG
 from airflow.operators.python import PythonOperator
 
 from dags.dag_factory import create_dag
@@ -9,9 +8,6 @@ from dataweave.crawl_config_saver import CrawlConfigSaver
 
 
 def fetch_and_save_config():
-    """
-    Fetches site configurations from the API and saves them as YAML files.
-    """
     sites = product_hub_api_client.fetch_sites(site_type="CRAWL")
 
     for site in sites.content:

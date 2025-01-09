@@ -1,16 +1,14 @@
 import asyncio
 
-from dags.dag_factory import create_dag
 from airflow.operators.python import PythonOperator
 
+from dags.dag_factory import create_dag
 from dataweave.enums.product_data_type import BatchDataType
-from dataweave.enums.source_type import SourceType
 from dataweave.gpt.batch_processor import batch_processor
 
 
 def process_test_code_batches(**context):
     asyncio.run(batch_processor.process(
-        source_type=SourceType.TEST_CODE,
         fetch_params={
             "status": "PENDING",
             "change_types": ["ADDED", "MODIFIED"],
@@ -35,12 +33,12 @@ task_definitions = [
     }
 ]
 
-# DAG 생성
+
 test_code_batch_dag = create_dag(
     dag_id=dag_id,
     schedule_interval=schedule_interval,
     task_definitions=task_definitions
 )
 
-# DAG 등록
+
 globals()[dag_id] = test_code_batch_dag

@@ -4,7 +4,7 @@ import urllib.parse
 from injector import singleton, inject
 
 from dataweave.async_http_client import AsyncHttpClient
-from dataweave.gitlab.git_lab_config import GitLabConfig
+from dataweave.api_client.git_lab_config import GitLabConfig
 
 
 @singleton

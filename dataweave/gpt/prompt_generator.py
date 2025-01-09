@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from dataweave.gpt.prompt import Prompt
+from dataweave.gpt.models.prompt_models import Prompt
 
 
 class PromptGenerator(ABC):

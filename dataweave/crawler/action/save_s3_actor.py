@@ -7,7 +7,7 @@ from injector import inject, singleton, Injector
 from dataweave.api_client.models.crawl_task_reponse import CrawlTaskResponse
 from dataweave.api_client.models.site_context_response import SiteContextResponse
 from dataweave.api_client.models.site_profile_reponse import SiteProfileResponse
-from dataweave.aws.s3_upload_service import S3UploadService
+from dataweave.aws.s3_service import S3Service
 from dataweave.crawler.action.action_interface import ActionInterface
 
 
@@ -15,7 +15,7 @@ from dataweave.crawler.action.action_interface import ActionInterface
 class SaveS3Actor(ActionInterface):
 
     @inject
-    def __init__(self, s3_upload_service: S3UploadService):
+    def __init__(self, s3_upload_service: S3Service):
         self.s3_upload_service = s3_upload_service
 
     async def action(self, site_profile: SiteProfileResponse, site_context: SiteContextResponse,
