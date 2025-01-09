@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from dataweave.gitlab.git_lab_client import GitLabClient
+from dataweave.api_client.git_lab_client import GitLabClient
 from dataweave.gpt.data_mapper import DataMapper, TestCodeDataMapper, ProductDataMapper
 
 
@@ -21,3 +21,6 @@ class TestCodeDataMapperProvider(DataMapperProvider):
 class ProductDataMapperProvider(DataMapperProvider):
     def provide(self) -> DataMapper:
         return ProductDataMapper()
+
+
+

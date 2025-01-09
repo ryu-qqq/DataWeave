@@ -1,6 +1,5 @@
 import logging
 
-from dataweave.antlr import JavaParser
 from dataweave.antlr.JavaParserListener import JavaParserListener
 
 

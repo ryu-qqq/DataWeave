@@ -2,8 +2,8 @@ from typing import Dict
 
 from injector import singleton, inject
 
+from dataweave.api_client.git_lab_client import GitLabClient
 from dataweave.enums.product_data_type import BatchDataType
-from dataweave.gitlab.git_lab_client import GitLabClient
 from dataweave.gpt.product_prompt_generator import ProductPromptGenerator
 from dataweave.gpt.prompt_generator import PromptGenerator
 from dataweave.gpt.prompt_generator_strategy_provider import PromptGeneratorStrategyProvider
@@ -30,7 +30,7 @@ class PromptGeneratorFactory:
     def __init__(self, gitlab_client: GitLabClient):
         self.providers: Dict[BatchDataType, PromptGeneratorStrategyProvider] = {
             BatchDataType.TEST_CODE: TestCodePromptGeneratorStrategyProvider(gitlab_client),
-            BatchDataType.TITLE: ProductPromptGeneratorStrategyProvider(),
+            BatchDataType.PRODUCT: ProductPromptGeneratorStrategyProvider(),
         }
 
     def get_provider(self, data_type: BatchDataType) -> PromptGenerator:

@@ -4,13 +4,11 @@ from airflow.operators.python import PythonOperator
 
 from dags.dag_factory import create_dag
 from dataweave.enums.product_data_type import BatchDataType
-from dataweave.enums.source_type import SourceType
 from dataweave.gpt.batch_processor import batch_processor
 
 
 def process_product_batches():
     asyncio.run(batch_processor.process(
-        source_type=SourceType.PRODUCT,
         fetch_params={
             "status": "PENDING",
             "change_types": ["ADDED", "MODIFIED"],
@@ -19,7 +17,7 @@ def process_product_batches():
             "cursor": None,
             "sort": "ASC"
         },
-        batch_data_type=BatchDataType.TITLE
+        batch_data_type=BatchDataType.PRODUCT
     ))
 
 

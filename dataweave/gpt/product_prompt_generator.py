@@ -3,7 +3,7 @@ from typing import List
 from injector import singleton
 
 from dataweave.gpt.models.product_data import ProductData
-from dataweave.gpt.prompt import Prompt
+from dataweave.gpt.models.prompt_models import Prompt
 from dataweave.gpt.prompt_generator import PromptGenerator
 
 

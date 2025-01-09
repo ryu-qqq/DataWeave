@@ -11,7 +11,7 @@ from dataweave.api_client.models.site_context_response import SiteContextRespons
 from dataweave.api_client.models.site_response import SiteResponse
 from dataweave.api_client.models.slice import Slice
 from dataweave.api_client.product_hub_config import ProductHubConfig
-from dataweave.gpt.batch_product_models import BatchProductModel
+from dataweave.gpt.models.product_models import BatchProductModel
 from dataweave.sync_http_client import SyncHttpClient
 
 
@@ -98,6 +98,12 @@ class ProductHubApiClient:
             return Slice.from_dict(response_data["data"], GitEventContextResponse)
         else:
             raise ValueError("Unexpected response format")
+
+    def update_git_event_status(self, git_event_id: int, class_name: str, status: str):
+        url = f"{self.__base_url}/api/v1/git-event/{git_event_id}"
+        headers = {"Content-Type": "application/json"}
+        request_body = {"gitEventStatus": status, "className": class_name}
+        self.__http_client.request("PATCH", url, headers=headers, data=json.dumps(request_body))
 
     def _convert_to_camel_case(self, processed_datas: BatchProductModel) -> dict:
         serialized_data = processed_datas.to_dict()

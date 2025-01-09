@@ -1,37 +1,20 @@
 from dataclasses import dataclass
-from typing import Optional, List
+from typing import Optional
 
-from dataweave.gitlab.git_lab_client import GitLabClient
-
-
-@dataclass
-class PublicMethodDomain:
-    method_name: str
-    return_type: str
-    parameters: List[dict]
-    return_type_fields: dict
-
-
-@dataclass
-class CodeClassDomain:
-    class_name: str
-    requires_test: bool
-    test_generate: bool
-    public_methods: List[PublicMethodDomain]
+from dataweave.api_client.git_lab_client import GitLabClient
 
 
 @dataclass
 class TestCodeData:
+    id: int
     branch_name: str
     project_id: int
     commit_id: str
     commit_message: str
     repository_name: str
     status: str
-    error_message: str
     file_path: str
     change_type: str
-    code_class: CodeClassDomain
     file_content: Optional[str] = None
 
     async def load_file_content(self, gitlab_client: GitLabClient):
