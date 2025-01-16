@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cache_client"
+version = "1.0.0"
+description = "A Redis-based caching client for asynchronous cache operations."
+authors = [
+    { name = "Ryu-qq", email = "fbtkdals2@gmail.com" }
+]
+dependencies = [
+    "aioredis>=2.0.0",
+    "injector>=0.18.4",
+    "python-dotenv>=0.21.0"
+]
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["."]

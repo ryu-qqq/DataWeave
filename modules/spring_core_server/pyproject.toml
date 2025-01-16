@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spring_core_server"
+version = "1.0.0"
+description = "A module for managing spring core server."
+authors = [
+    { name = "Ryu-qq", email = "fbtkdals2@gmail.com" }
+]
+dependencies = [
+    "injector>=0.18.4",
+    "python-dotenv>=0.21.0"
+]
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["."]

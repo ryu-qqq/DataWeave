@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openAi"
+version = "1.0.0"
+description = "A client library for interacting with OpenAI API, supporting batch and real-time operations."
+authors = [
+    { name = "Ryu-qq", email = "fbtkdals2@gmail.com" }
+]
+dependencies = [
+    "openai>=0.27.0",
+    "injector>=0.18.4",
+    "python-dotenv>=0.21.0"
+]
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["."]

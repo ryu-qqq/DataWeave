@@ -108,3 +108,8 @@ test_code_batch_dag.py를 통해 GPT 배치 작업을 실행합니다. 배치 �
 ## 노션 링크
 
 [DataWeave Notion 문서](https://www.notion.so/DataWeave-12f72e942a1680f3a2f8d33ee7332eac)
+
+가상 환경
+module/http-client
+    .venv-http-client
+

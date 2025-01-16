@@ -4,7 +4,7 @@ from airflow.operators.python import PythonOperator
 
 from dags.dag_factory import create_dag
 from dataweave.api_client.product_hub_api_client import product_hub_api_client
-from dataweave.crawl_config_saver import CrawlConfigSaver
+from modules.crawler.crawl_config_saver import CrawlConfigSaver
 
 
 def fetch_and_save_config():

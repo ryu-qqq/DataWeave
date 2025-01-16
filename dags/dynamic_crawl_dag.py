@@ -6,10 +6,10 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 
 from dags.dag_factory import create_default_args
-from dataweave.api_client.models.site_context_response import SiteContextResponse
-from dataweave.api_client.models.site_profile_reponse import SiteProfileResponse
-from dataweave.api_client.models.crawl_task_reponse import CrawlTaskResponse
-from dataweave.task_executor import TaskExecutor
+from modules.crawler.models.site_context_response import SiteContextResponse
+from modules.crawler.models.site_profile_reponse import SiteProfileResponse
+from modules.crawler.models.crawl_task_reponse import CrawlTaskResponse
+from modules.utils.task_executor import TaskExecutor
 
 dags_created = Counter('dags_created', 'Number of successfully created DAGs')
 dags_failed = Counter('dags_failed', 'Number of failed DAG creations')
